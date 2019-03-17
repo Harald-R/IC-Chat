@@ -26,10 +26,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        widget.cpp
+        widget.cpp \
+    chatsystem.cpp
 
 HEADERS += \
-        widget.h
+        widget.h \
+    chatbutton.h
 
 FORMS += \
         widget.ui

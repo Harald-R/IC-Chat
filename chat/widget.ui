@@ -51,7 +51,7 @@
     </layout>
    </item>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="sidebar" stretch="0,0">
+    <layout class="QVBoxLayout" name="sidebar" stretch="0,0,0,0,0">
      <property name="leftMargin">
       <number>5</number>
      </property>
@@ -131,6 +131,33 @@
       </layout>
      </item>
      <item>
+      <widget class="ChatButton" name="pushButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>First chat</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="ChatButton" name="pushButton_2">
+       <property name="text">
+        <string>Second chat</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="ChatButton" name="pushButton_3">
+       <property name="text">
+        <string>Third chat</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QListView" name="contactsList"/>
      </item>
     </layout>
@@ -138,6 +165,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ChatButton</class>
+   <extends>QPushButton</extends>
+   <header>chatbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
