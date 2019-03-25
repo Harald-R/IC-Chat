@@ -18,10 +18,12 @@ Widget::~Widget()
 void Widget::on_sendButton_clicked()
 {
     QString textBoxValue;
-    textBoxValue = ui->enterMessageText->toPlainText();
+    static QString chatHist;
 
-    ui->searchText->setText(textBoxValue);
-    ui->chatHistory->setText(textBoxValue);
-    ui->enterMessageText->setText(textBoxValue);
+    textBoxValue = ui->enterMessageText->toPlainText();
+    chatHist += textBoxValue + "\n";
+    ui->chatHistory->setText(chatHist);
+
+//    ui->enterMessageText->setText(textBoxValue);
     ui->enterMessageText->clear();
 }
