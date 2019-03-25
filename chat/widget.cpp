@@ -22,7 +22,7 @@ void Widget::on_sendButton_clicked()
 
     textBoxValue = ui->enterMessageText->toPlainText();
     chatHist += textBoxValue + "\n";
-    ui->chatHistory->setText(chatHist);
+    ui->chatHistory->append(textBoxValue);
 
 //    ui->enterMessageText->setText(textBoxValue);
     ui->enterMessageText->clear();
