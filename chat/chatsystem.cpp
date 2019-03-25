@@ -1,4 +1,5 @@
 #include "chatbutton.h"
+#include <QInputDialog>
 
 ChatButton::ChatButton(QWidget *parent)
     : QPushButton(parent)
@@ -44,3 +45,5 @@ void ChatButton::paintEvent(QPaintEvent *event)
     painter.setPen(QPen(QColor(color)));
     painter.drawEllipse(QPointF(30,30), 20, 20);
 }
+
+
