@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     sqlcontactmodel.cpp \
-    sqlconversationmodel.cpp
+    sqlconversationmodel.cpp \
+    dbmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,5 @@ DISTFILES +=
 
 HEADERS += \
     sqlconversationmodel.h \
-    sqlcontactmodel.h
+    sqlcontactmodel.h \
+    dbmanager.h
