@@ -28,7 +28,7 @@ static void createTable()
         qFatal("Failed to query database: %s", qPrintable(query.lastError().text()));
     }
 
-    query.exec("INSERT INTO Conversations VALUES('User2', 'Me', '2015-11-20T06:30:02', 'God morgen. Har du fått mitt maleri?')");
+    query.exec("INSERT INTO Conversations VALUES('User2', 'Me', '2015-11-20T06:30:02', 'Hello?')");
 }
 
 SqlConversationModel::SqlConversationModel(QObject *parent) :
