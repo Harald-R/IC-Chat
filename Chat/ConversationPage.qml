@@ -6,17 +6,17 @@ import SqlDB 1.0
 
 Page {
     id: root
-
+    anchors.rightMargin: parent.right
     property string inConversationWith
 
     header: ToolBar {
-        ToolButton {
-            text: qsTr("Back")
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
-            onClicked: root.StackView.view.pop()
-        }
+//        ToolButton {
+//            text: qsTr("Back")
+//            anchors.left: parent.left
+//            anchors.leftMargin: 10
+//            anchors.verticalCenter: parent.verticalCenter
+//            onClicked: root.StackView.view.pop()
+//        }
 
         Label {
             id: pageTitle

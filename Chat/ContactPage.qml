@@ -5,18 +5,26 @@ import SqlDB 1.0
 
 Page {
     id:root
-       anchors.fill: parent
+    width: 300
+    anchors.fill: parent
        header: ToolBar {
-               Label {
-                   text: qsTr("Contacts")
-                   font.pixelSize: 20
-                   anchors.centerIn: parent
+           id: toolBar
+           Label {
+               text: qsTr("Contacts")
+               transformOrigin: Item.Left
+               anchors.verticalCenterOffset: 0
+               anchors.horizontalCenterOffset: 0
+               anchors.left: parent.left
+               anchors.leftMargin: 0
+               font.pixelSize: 20
+               anchors.centerIn: parent
                }
            }
 
-ListView {
+    ListView {
 
            id: listView
+           width: 300
            anchors.fill: parent
            topMargin: 48
            leftMargin: 48
@@ -29,7 +37,13 @@ ListView {
                width: listView.width - listView.leftMargin - listView.rightMargin
                height: 40 /*avatar.implicitHeight*/
                leftPadding: 72 /*avatar.implicitWidth + 32*/
-               onClicked: root.StackView.view.push("qrc:/ConversationPage.qml", { inConversationWith: modelData })
+               // Nu stiu cum sa gasesc StackView-ul din main ca sa pot face push la fereastra de conversatie
+               // aferenta userului clicku-it (inConversationWith: modelData)
+               // Inainte era root.StackView.view.push("qrc:/ConversationPage.qml", { inConversationWith: modelData })
+               // ma gandeam la ceva de genul: root.Rectangle.RowLayout.StackView....
+               // fiind nested una in alta, insa nu merge
+               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { inConversationWith: modelData })
+
                 Image {
                    id: avatar
                    width: 40
@@ -40,3 +54,8 @@ ListView {
            }
        }
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/
