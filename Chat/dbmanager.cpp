@@ -294,8 +294,3 @@ int DbManager::getLastInsertId(const QSqlQuery &query)
     return id;
 }
 
-QString DbManager::getCurrentTime()
-{
-//    QDate date;
-}
-

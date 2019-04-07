@@ -134,7 +134,6 @@ private:
 
     bool checkEmailFormat(const QString &email);
     int getLastInsertId(const QSqlQuery &query);
-    QString getCurrentTime();
 };
 
 #endif // DBMANAGER_H
