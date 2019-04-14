@@ -60,7 +60,7 @@ ApplicationWindow {
                 Layout.preferredWidth: 500
                 Layout.maximumWidth: 500
                 Layout.minimumHeight: 150
-                initialItem:ConversationPage{ x: 0 ;width: 700 }
+                initialItem: ConversationPage{ x: 0 ; width: 700 }
             }
         }
 //    }

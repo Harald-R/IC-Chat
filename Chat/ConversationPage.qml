@@ -7,7 +7,9 @@ import SqlDB 1.0
 Page {
     id: root
     anchors.rightMargin: parent.right
-    property string inConversationWith
+    property string p_user_id
+    property string p_group_id
+    property string p_group_name
 
     header: ToolBar {
 //        ToolButton {
@@ -20,7 +22,7 @@ Page {
 
         Label {
             id: pageTitle
-            text: inConversationWith
+            text: p_group_name
             font.pixelSize: 20
             anchors.centerIn: parent
         }
@@ -38,14 +40,15 @@ Page {
             displayMarginEnd: 40
             verticalLayoutDirection: ListView.BottomToTop
             spacing: 12
-            model: SqlConversationModel {
-                recipient: inConversationWith
+            model: ConversationModel {
+                userId: p_user_id;
+                groupId: p_group_id;
             }
             delegate: Column {
                 anchors.right: sentByMe ? parent.right : undefined
                 spacing: 6
 
-                readonly property bool sentByMe: model.recipient !== "Me"
+                readonly property bool sentByMe: model.user_id == p_user_id
 
                 Row {
                     id: messageRow
@@ -67,7 +70,7 @@ Page {
 
                         Label {
                             id: messageText
-                            text: model.message
+                            text: model.content
                             color: sentByMe ? "black" : "white"
                             anchors.fill: parent
                             anchors.margins: 12
@@ -106,7 +109,7 @@ Page {
                     text: qsTr("Send")
                     enabled: messageField.length > 0
                     onClicked: {
-                        listView.model.sendMessage(inConversationWith, messageField.text);
+                        listView.model.sendMessage(messageField.text);
                         messageField.text = "";
                     }
                 }

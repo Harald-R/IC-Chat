@@ -14,9 +14,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    sqlcontactmodel.cpp \
-    sqlconversationmodel.cpp \
-    dbmanager.cpp
+    dbmanager.cpp \
+    contactsmodel.cpp \
+    conversationmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,6 +34,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES +=
 
 HEADERS += \
-    sqlconversationmodel.h \
-    sqlcontactmodel.h \
-    dbmanager.h
+    dbmanager.h \
+    contactsmodel.h \
+    conversationmodel.h

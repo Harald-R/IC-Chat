@@ -8,34 +8,35 @@
 
 #include <iostream>
 
-DbManager::DbManager()
+void DbManager::connect()
 {
     const QString hostname = "localhost";
     const QString databaseName = "chat";
     const QString username = "root";
     const QString password = "";
 
-    this->db = QSqlDatabase::addDatabase("QMYSQL");
-    this->db.setHostName(hostname);
-    this->db.setDatabaseName(databaseName);
-    this->db.setUserName(username);
-    this->db.setPassword(password);
-    if(!this->db.open()) {
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName(hostname);
+    db.setDatabaseName(databaseName);
+    db.setUserName(username);
+    db.setPassword(password);
+    if(!db.open()) {
         qDebug() << "Error opening database";
         exit(1);
     }
 }
 
-DbManager::~DbManager()
+void DbManager::closeConnection()
 {
-    if (this->db.isOpen()) {
-        this->db.close();
+    QSqlDatabase db = QSqlDatabase::database();
+    if (db.isOpen()) {
+        db.close();
     }
 }
 
-bool DbManager::isOpen() const
+bool DbManager::isOpen()
 {
-    return this->db.isOpen();
+    return QSqlDatabase::database().isOpen();
 }
 
 int DbManager::addUser(const QString &username, const QString &password, const QString &email)
@@ -97,7 +98,7 @@ bool DbManager::removeUser(const QString &username)
     return true;
 }
 
-bool DbManager::userExists(const QString& username) const
+bool DbManager::userExists(const QString& username)
 {
     if (username.isEmpty()) {
         qDebug() << "Failed checking for user: empty parameter";
@@ -116,7 +117,7 @@ bool DbManager::userExists(const QString& username) const
     return query.next();
 }
 
-void DbManager::printAllUsers() const
+void DbManager::printAllUsers()
 {
     QSqlQuery query;
     query.prepare("SELECT username FROM users");
@@ -213,21 +214,22 @@ bool DbManager::removeUserFromGroup(const unsigned int user_id, const unsigned i
     return true;
 }
 
-int DbManager::addMessage(const unsigned int user_id, const QString &content, const QString &creation_time)
+int DbManager::addMessage(const unsigned int user_id, const unsigned int group_id, const QString &content, const QString &creation_time)
 {
     if (content.isEmpty() || creation_time.isEmpty()) {
-        qDebug() << "Failed adding message: empty parameter";
+        QDebug(QtCriticalMsg) << "Failed adding message: empty parameter";
         return -1;
     }
 
     QSqlQuery query;
-    query.prepare("INSERT INTO messages (user_id, content, creation_time) VALUES (:user_id, :content, :creation_time)");
+    query.prepare("INSERT INTO messages (user_id, group_id, content, creation_time) VALUES (:user_id, :group_id, :content, :creation_time)");
     query.bindValue(":user_id", user_id);
+    query.bindValue(":group_id", group_id);
     query.bindValue(":content", content);
     query.bindValue(":creation_time", creation_time);
 
     if (!query.exec()) {
-        qDebug() << "Failed adding message: " << query.lastError();
+        QDebug(QtCriticalMsg) << "Failed adding message: " << query.lastError();
         return -1;
     }
 
@@ -259,7 +261,7 @@ int DbManager::postMessageByUser(const unsigned int user_id, const unsigned int 
         creation_time = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd hh:mm:ss");
     }
 
-    int message_id = addMessage(user_id, content, creation_time);
+    int message_id = addMessage(user_id, group_id, content, creation_time);
     if (message_id < 0) {
         return message_id;
     }

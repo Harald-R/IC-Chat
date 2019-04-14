@@ -31,9 +31,9 @@ Page {
            bottomMargin: 48
            rightMargin: 48
            spacing: 20
-           model: ["User1", "User2", "User3"]
+           model: ContactsModel {}
            delegate: ItemDelegate {
-               text: modelData
+               text: model.name
                width: listView.width - listView.leftMargin - listView.rightMargin
                height: 40 /*avatar.implicitHeight*/
                leftPadding: 72 /*avatar.implicitWidth + 32*/
@@ -42,7 +42,11 @@ Page {
                // Inainte era root.StackView.view.push("qrc:/ConversationPage.qml", { inConversationWith: modelData })
                // ma gandeam la ceva de genul: root.Rectangle.RowLayout.StackView....
                // fiind nested una in alta, insa nu merge
-               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { inConversationWith: modelData })
+               onClicked: rightGridView.push("qrc:/ConversationPage.qml", {
+                                                 p_user_id: 27,
+                                                 p_group_id: model.group_id,
+                                                 p_group_name: model.name
+                                             })
 
                 Image {
                    id: avatar
