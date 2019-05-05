@@ -22,7 +22,7 @@ public slots:
     qint64 sendToClient(QTcpSocket *socket, const QString &str);
 
 signals:
-    void gotNewMesssage(QString msg);
+    void gotNewMesssage(QTcpSocket *clientSocket, QString msg);
     void clientDisconnected();
 
 private:

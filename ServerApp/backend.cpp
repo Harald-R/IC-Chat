@@ -1,5 +1,7 @@
 #include "backend.h"
 #include "server.h"
+#include "dbmanager.h"
+#include <QRegExpValidator>
 
 Backend::Backend(QObject *parent) : QObject(parent)
 {
@@ -70,7 +72,68 @@ void Backend::clientDisconnectedFromServer()
     emit clientDisconnected();
 }
 
-void Backend::gotNewMesssage(QString msg)
+void Backend::gotNewMesssage(QTcpSocket *clientSocket, QString msg)
 {
+    if (checkForCommand(msg)) {
+        if (!processCommand(clientSocket, msg)) {
+            qDebug() << "Unable to process command: " << msg;
+        }
+        return;
+    }
+
     emit newMessage(msg);
+}
+
+int Backend::checkForCommand(QString msg)
+{
+    QRegExp regex("SRV:(login|register|get_groups):([^:]*:)*[^:]*");
+    QRegExpValidator v(regex, nullptr);
+    int pos = 0;
+
+    return v.validate(msg, pos) == QValidator::Acceptable;
+}
+
+int Backend::processCommand(QTcpSocket *clientSocket, QString command)
+{
+    QStringList stringList = command.split(":");
+    QStringList::Iterator iter = stringList.begin();
+    iter++;
+
+    qDebug() << *iter;
+    if (*iter == "login") {
+        iter++;
+        QString username = *iter;
+        iter++;
+        QString password = *iter;
+
+        int user_id = DbManager::checkCredentials(username, password);
+
+        // TODO: map of client_socket -> user_id, since there will be multiple users connected
+        this->userId = user_id;
+        if (this->userId < 0)
+            return -1;
+
+        this->server->sendToClient(clientSocket, "SRV:login:success");
+        return 1;
+    } else if (*iter == "get_groups") {
+        // TODO: get user id for specific client
+        QList<QPair<QString,QString>> groupsList = DbManager::getUserGroups(this->userId);
+
+        QString reply = "SRV:groups:";
+        for (const auto &group : groupsList) {
+            QString id = group.first;
+            QString name = group.second;
+            reply.append(id);
+            reply.append(",");
+            reply.append(name);
+            reply.append(":");
+        }
+
+        this->server->sendToClient(clientSocket, reply);
+        return 1;
+    } else {
+        qDebug() << "Unknown command";
+    }
+
+    return 0;
 }

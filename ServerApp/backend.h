@@ -21,10 +21,13 @@ public slots:
     QString testClicked();
     void clientConnectedToServer();
     void clientDisconnectedFromServer();
-    void gotNewMesssage(QString msg);
+    void gotNewMesssage(QTcpSocket *clientSocket, QString msg);
 
 private:
     Server *server;
+    int userId;
+    int checkForCommand(QString msg);
+    int processCommand(QTcpSocket *clientSocket, QString command);
 };
 
 #endif // BACKEND_H

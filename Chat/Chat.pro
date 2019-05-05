@@ -13,6 +13,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    client.cpp \
+    clienthandler.cpp \
+    groupsmodel.cpp \
         main.cpp \
     sqlcontactmodel.cpp \
     sqlconversationmodel.cpp
@@ -33,5 +36,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES +=
 
 HEADERS += \
+    client.h \
+    clienthandler.h \
+    groupsmodel.h \
     sqlconversationmodel.h \
     sqlcontactmodel.h

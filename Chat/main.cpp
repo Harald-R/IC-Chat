@@ -4,6 +4,9 @@
 #include <QSqlError>
 #include <QtQml>
 
+#include "clienthandler.h"
+#include "groupsmodel.h"
+
 #include "sqlcontactmodel.h"
 #include "sqlconversationmodel.h"
 
@@ -35,12 +38,23 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<SqlContactModel>("SqlDB", 1, 0, "SqlContactModel");
+    ClientHandler clientHandler;
+    clientHandler.connectToServer();
+
+    // TODO: replace with actual credentials once login page exists
+    QString msg = "SRV:login:user_1:password";
+    clientHandler.sendMessage(msg);
+
+    GroupsModel groupsModel;
+    clientHandler.requestUserGroups(&groupsModel);
+
+//    qmlRegisterType<SqlContactModel>("SqlDB", 1, 0, "SqlContactModel");
     qmlRegisterType<SqlConversationModel>("SqlDB", 1, 0, "SqlConversationModel");
 
     connectToDatabase();
 
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("groupsModel", &groupsModel);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

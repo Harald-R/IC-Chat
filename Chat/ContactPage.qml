@@ -30,7 +30,7 @@ Page {
            bottomMargin: 48
            rightMargin: 48
            spacing: 15
-           model: ["User1", "User2", "User3"]
+           model: groupsModel //["User1", "User2", "User3"]
            delegate: ItemDelegate {
                id: itemDelegate
                background: Rectangle{
@@ -42,12 +42,12 @@ Page {
                     radius: 4
                }
 
-               text: modelData
+               text: model.name
                width: listView.width - listView.leftMargin - listView.rightMargin
                height: 40 /*avatar.implicitHeight*/
                leftPadding: 72 /*avatar.implicitWidth + 32*/
 
-               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { inConversationWith: modelData})
+               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { inConversationWith: model.name })
 
                Image {
                    id: avatar

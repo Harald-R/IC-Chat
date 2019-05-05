@@ -40,14 +40,14 @@ void Server::readClient()
         QString str;
         in >> str;
 
-        emit gotNewMesssage(str);
+        emit gotNewMesssage(clientSocket, str);
 
         m_nNextBlockSize = 0;
 
-        if (sendToClient(clientSocket, QString("Reply: received [%1]").arg(str)) == -1)
-        {
-            qDebug() << "Some error occured";
-        }
+//        if (sendToClient(clientSocket, QString("Reply: received [%1]").arg(str)) == -1)
+//        {
+//            qDebug() << "Some error occured";
+//        }
     }
 }
 
