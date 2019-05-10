@@ -56,12 +56,3 @@ SplitView {
             initialItem:ConversationPage{}
         }
     }
-
-
-
-
-
-
-
-
-

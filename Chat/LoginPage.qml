@@ -184,7 +184,6 @@ Page {
             color: "#80000000"
             smooth: true
             source: parent
-//
         }
     }
 
@@ -212,88 +211,4 @@ Page {
         }
     }
 
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}D{i:14;anchors_x:268}D{i:18;anchors_x:268}
-}
- ##^##*/
