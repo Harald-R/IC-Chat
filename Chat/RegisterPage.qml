@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.9
 import QtQuick.Controls 2.4
+import QtGraphicalEffects 1.12
 
 Page {
     id: registerCredentials
@@ -24,6 +25,18 @@ Page {
             anchors.topMargin: 60
             Layout.fillHeight: true
             anchors.horizontalCenter: parent.horizontalCenter
+            Rectangle{
+                id: foregroundShadow
+
+                width: foregroundBackgroundColor.width
+                height: foregroundBackgroundColor.height
+                color: "#d26208"
+                z: -1
+                anchors.verticalCenterOffset: 5
+                anchors.horizontalCenterOffset: 5
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
     }
 
@@ -150,7 +163,7 @@ Page {
             }
             anchors.horizontalCenterOffset: 0
         }
-        anchors.verticalCenterOffset: 120
+        anchors.verticalCenterOffset: 130
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
@@ -174,7 +187,21 @@ Page {
             z: -1
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
+            DropShadow{
+                id: registerRectShadow
+                anchors.fill: source
+                cached: true
+                horizontalOffset: 2
+                verticalOffset: 3
+                radius: 10.0
+                samples: 64
+                color: "#80000000"
+                smooth: true
+                source: parent
+
+            }
         }
+
     }
 
     Button {
@@ -189,8 +216,22 @@ Page {
         onClicked: {
             //            username = usernameTextArea.getText;
             //            password = passwordTextArea.getText;
-            mainLayout.push("qrc:/MainApplicationWindow.qml")
+            mainLayout.push("qrc:/LoginPage.qml")
         }
+        DropShadow{
+            id: credentialsButtonRectShadow
+            anchors.fill: source
+            cached: true
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 30.0
+            samples: 64
+            color: "#80000000"
+            smooth: true
+            source: parent
+
+        }
+
     }
 
 
@@ -198,6 +239,8 @@ Page {
 
 
 }
+
+
 
 
 

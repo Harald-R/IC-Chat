@@ -1,12 +1,13 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.9
 import QtQuick.Controls 2.4
+import QtGraphicalEffects 1.12
 
 Page {
     id: loginCredentials
     property string username
     property string password
-
+    visible: false
     Rectangle{
         id: backgroundColor
         color: "#1D3973"
@@ -23,6 +24,18 @@ Page {
             anchors.topMargin: 60
             Layout.fillHeight: true
             anchors.horizontalCenter: parent.horizontalCenter
+            Rectangle{
+                id: foregroundShadow
+
+                width: foregroundBackgroundColor.width
+                height: foregroundBackgroundColor.height
+                color: "#d26208"
+                z: -1
+                anchors.verticalCenterOffset: 5
+                anchors.horizontalCenterOffset: 5
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
     }
 
@@ -130,6 +143,19 @@ Page {
             z: -1
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
+            DropShadow{
+                id: loginRectShadow
+                anchors.fill: source
+                cached: true
+                horizontalOffset: 2
+                verticalOffset: 3
+                radius: 10.0
+                samples: 64
+                color: "#80000000"
+                smooth: true
+                source: parent
+
+            }
         }
     }
 
@@ -147,6 +173,19 @@ Page {
             //            password = passwordTextArea.getText;
             mainLayout.push("qrc:/MainApplicationWindow.qml")
         }
+        DropShadow{
+            id: credentialsButtonRectShadow
+            anchors.fill: source
+            cached: true
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 30.0
+            samples: 64
+            color: "#80000000"
+            smooth: true
+            source: parent
+//
+        }
     }
 
     Button {
@@ -158,6 +197,19 @@ Page {
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: 200
         onClicked: mainLayout.push("qrc:/RegisterPage.qml")
+        DropShadow{
+            id: registrationButtonRectShadow
+            anchors.fill: source
+            cached: true
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 8.0
+            samples: 16
+            color: "#80000000"
+            smooth: true
+            source: parent
+
+        }
     }
 
 
@@ -231,7 +283,17 @@ Page {
 
 
 
+
+
+
+
+
+
+
+
+
+
 /*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}D{i:14;anchors_x:268}
+    D{i:0;autoSize:true;height:480;width:640}D{i:14;anchors_x:268}D{i:18;anchors_x:268}
 }
  ##^##*/

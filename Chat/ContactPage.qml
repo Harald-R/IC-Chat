@@ -45,15 +45,17 @@ Page {
                    width: 40
                    height: 40
                    fillMode:Image.PreserveAspectFit
+
                    source: "qrc:/download.png"/* + modelData.replace(" ", "_") + ".png"*/
                 }
+
            }
 
     }
 
        Rectangle {
            id: background
-           color: "#F2B90C"
+           color: "#c2c2c1"
            z: -1
            anchors.fill: parent
        }
