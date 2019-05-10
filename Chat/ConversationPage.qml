@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.13
 import QtQuick.Layouts 1.9
 import QtQuick.Controls 2.4
 
@@ -6,7 +6,7 @@ import SqlDB 1.0
 
 Page {
     id: root
-    anchors.rightMargin: parent.right
+//    anchors.rightMargin: parent.right
     property string inConversationWith
 
     header: ToolBar {

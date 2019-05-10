@@ -29,12 +29,13 @@ ApplicationWindow {
                 id: leftGridView
                 width: 300
                 height: 199
-                anchors.right: rightGridView.left
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.top: parent.top
+// Not needed
+//                anchors.right: rightGridView.left
+//                anchors.bottom: parent.bottom
+//                anchors.left: parent.left
+//                anchors.top: parent.top
                 anchors.rightMargin: 700
-                anchors.bottomMargin: 0
+//                anchors.bottomMargin: 0
                 Layout.minimumWidth: 50
                 Layout.preferredWidth: 100
                 Layout.maximumWidth: 300
@@ -48,19 +49,15 @@ ApplicationWindow {
                 // Adica sa se schimbe conversatia
                 id: rightGridView
                 anchors.right: parent.right
-                anchors.rightMargin: 0
                 anchors.left: leftGridView.right
                 anchors.leftMargin: 2
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.top: parent.top
-                anchors.topMargin: 0
+
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Layout.minimumWidth: 300
                 Layout.preferredWidth: 500
                 Layout.maximumWidth: 500
                 Layout.minimumHeight: 150
-                initialItem:ConversationPage{ x: 0 ;width: 700 }
+                initialItem:ConversationPage{}
             }
         }
 //    }

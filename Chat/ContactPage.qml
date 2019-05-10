@@ -42,8 +42,7 @@ Page {
                // Inainte era root.StackView.view.push("qrc:/ConversationPage.qml", { inConversationWith: modelData })
                // ma gandeam la ceva de genul: root.Rectangle.RowLayout.StackView....
                // fiind nested una in alta, insa nu merge
-               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { inConversationWith: modelData })
-
+               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { inConversationWith: modelData}, {Immediate:true})
                 Image {
                    id: avatar
                    width: 40
