@@ -5,5 +5,8 @@
         <file>ContactPage.qml</file>
         <file>ConversationPage.qml</file>
         <file>sqlcontactmodel.h</file>
+        <file>LoginPage.qml</file>
+        <file>RegisterPage.qml</file>
+        <file>MainApplicationWindow.qml</file>
     </qresource>
 </RCC>
