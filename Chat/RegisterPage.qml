@@ -10,7 +10,7 @@ Page {
 
     Rectangle{
         id: backgroundColor
-        color: "#1d3973"
+        color: "#273043"
         z: -2
         anchors.fill: parent
 
@@ -18,7 +18,7 @@ Page {
             id: foregroundBackgroundColor
             x: 220
             width: 300
-            color: "#f9d41d"
+            color: "#EFF6EE"
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 40
             anchors.top: parent.top
@@ -27,10 +27,9 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             Rectangle{
                 id: foregroundShadow
-
                 width: foregroundBackgroundColor.width
                 height: foregroundBackgroundColor.height
-                color: "#d26208"
+                color: "#7EA8BE"
                 z: -1
                 anchors.verticalCenterOffset: 5
                 anchors.horizontalCenterOffset: 5
@@ -54,6 +53,12 @@ Page {
             height: usernamePane.height
             text: qsTr("")
             Layout.fillWidth: true
+            anchors.centerIn: parent
+            background: Rectangle{
+                id: usernameTextAreaBackground
+                border.width: 1
+                border.color: "#000000"
+            }
         }
 
         Label {
@@ -72,7 +77,7 @@ Page {
                 id: usernameBackground
                 width: 200
                 height: 30
-                color: "#E7961A"
+                color: "#9197AE"
                 z: -1
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -94,6 +99,12 @@ Page {
             height: passwordPane.height
             text: qsTr("")
             Layout.fillWidth: true
+            anchors.centerIn: parent
+            background: Rectangle{
+                id: passwordTextAreaBackground
+                border.width: 1
+                border.color: "#000000"
+            }
         }
 
         Label {
@@ -114,7 +125,7 @@ Page {
                 y: -4
                 width: 200
                 height: 30
-                color: "#944530"
+                color: "#273043"
                 z: -1
                 anchors.horizontalCenter: passwordLabel.horizontalCenter
                 anchors.verticalCenter: passwordLabel.verticalCenter
@@ -138,6 +149,12 @@ Page {
             height: confirmPasswordPane.height
             text: qsTr("")
             Layout.fillWidth: true
+            anchors.centerIn: parent
+            background: Rectangle{
+                id: confirmPasswordTextAreaBackground
+                border.width: 1
+                border.color: "#000000"
+            }
         }
 
         Label {
@@ -156,7 +173,7 @@ Page {
                 y: -4
                 width: 200
                 height: 30
-                color: "#592525"
+                color: "#273043"
                 anchors.verticalCenter: confirmPasswordLabel.verticalCenter
                 anchors.horizontalCenter: confirmPasswordLabel.horizontalCenter
                 z: -1
@@ -183,31 +200,31 @@ Page {
             id: registerTextBackground
             width: 200
             height: 30
-            color: "#e87909"
+            color: "#7EA8BE"
             z: -1
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            DropShadow{
-                id: registerRectShadow
-                anchors.fill: source
-                cached: true
-                horizontalOffset: 2
-                verticalOffset: 3
-                radius: 10.0
-                samples: 64
-                color: "#80000000"
-                smooth: true
-                source: parent
+            Rectangle{
+                id: registerTextBackgroundShadow
 
+                width: parent.width
+                height: parent.height
+                color: "#273043"
+                z: -1
+                anchors.verticalCenterOffset: 3
+                anchors.horizontalCenterOffset: 3
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
-
     }
 
     Button {
         id: credentialsButton
         x: 278
         y: 391
+        height: 50
+        width: 200
         text: qsTr("Register")
         anchors.verticalCenterOffset: 200
         anchors.horizontalCenter: parent.horizontalCenter
@@ -218,19 +235,25 @@ Page {
             //            password = passwordTextArea.getText;
             mainLayout.push("qrc:/LoginPage.qml")
         }
-        DropShadow{
-            id: credentialsButtonRectShadow
-            anchors.fill: source
-            cached: true
-            horizontalOffset: 3
-            verticalOffset: 3
-            radius: 30.0
-            samples: 64
-            color: "#80000000"
-            smooth: true
-            source: parent
 
+        background: Rectangle{
+            id: credentialsButtonBackground
+            anchors.fill: parent
+            color: credentialsButton.enabled ? "#7EA8BE" : "#EFF6EE"
+            border.color: "#000000"
+            border.width: 1
+            Rectangle{
+                id: credentialsButtonBackgroundShadow
+
+                width: parent.width
+                height: parent.height
+                color: credentialsButton.enabled ? "#273043" : "#EFF6EE"
+                z: -1
+                anchors.verticalCenterOffset: 3
+                anchors.horizontalCenterOffset: 3
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
-
     }
 }

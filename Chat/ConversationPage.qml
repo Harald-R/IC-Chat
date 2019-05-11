@@ -33,7 +33,7 @@ Page {
             id: listView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.margins: pane.leftPadding + messageField.leftPadding
+            Layout.margins: textInput.leftPadding + messageField.leftPadding
             displayMarginBeginning: 40
             displayMarginEnd: 40
             verticalLayoutDirection: ListView.BottomToTop
@@ -63,7 +63,7 @@ Page {
                         width: Math.min(messageText.implicitWidth + 24,
                             listView.width - (!sentByMe ? avatar.width + messageRow.spacing : 0))
                         height: messageText.implicitHeight + 24
-                        color: sentByMe ? "lightgrey" : "steelblue"
+                        color: sentByMe ? "lightgrey" : "#273043"
 
                         Label {
                             id: messageText
@@ -88,8 +88,15 @@ Page {
         }
 
         Pane {
-            id: pane
+            id: textInput
             Layout.fillWidth: true
+            background: Rectangle{
+                id: textInputBackground
+                anchors.fill: parent
+                color: "#e2e2e2"
+                border.color: "#000000"
+                border.width: 1
+            }
 
             RowLayout {
                 width: parent.width
@@ -108,6 +115,11 @@ Page {
                     onClicked: {
                         listView.model.sendMessage(inConversationWith, messageField.text);
                         messageField.text = "";
+                    }
+                    background: Rectangle{
+                       id:sendButtonBackground
+                       border.width: 1
+                       border.color: sendButton.enabled ? "#000000" : "#cccccc"
                     }
                 }
             }

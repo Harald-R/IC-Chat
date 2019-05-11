@@ -22,7 +22,6 @@ Page {
            }
 
     ListView {
-
            id: listView
            width: 300
            anchors.fill: parent
@@ -33,6 +32,16 @@ Page {
            spacing: 15
            model: ["User1", "User2", "User3"]
            delegate: ItemDelegate {
+               id: itemDelegate
+               background: Rectangle{
+                    id: userItemBackground
+                    anchors.centerIn: parent
+                    width: parent.width + 5
+                    height: parent.height + 5
+                    color: itemDelegate.down ? "#ffffff" : "#EFF6EE"
+                    radius: 4
+               }
+
                text: modelData
                width: listView.width - listView.leftMargin - listView.rightMargin
                height: 40 /*avatar.implicitHeight*/
@@ -55,10 +64,8 @@ Page {
 
        Rectangle {
            id: background
-           color: "#c2c2c1"
+           color: "#273043"
            z: -1
            anchors.fill: parent
        }
 }
-
-
