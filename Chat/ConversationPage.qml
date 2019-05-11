@@ -10,7 +10,7 @@ Page {
 
     Component.onCompleted: {
         clientHandler.clearMessages()
-        clientHandler.sendMessage("SRV:get_messages:" + groupId);
+        clientHandler.sendMessage("SRV|get_messages|" + groupId);
     }
 
     header: ToolBar {
@@ -116,7 +116,7 @@ Page {
                     text: qsTr("Send")
                     enabled: messageField.length > 0
                     onClicked: {
-                        clientHandler.sendMessage("SRV:new_message:"+groupId+":"+messageField.text)
+                        clientHandler.sendMessage("SRV|new_message|"+groupId+"|"+messageField.text)
                         messageField.text = "";
                     }
                     background: Rectangle{

@@ -93,7 +93,7 @@ int Backend::checkForCommand(QString msg)
                        "get_messages|"
                        "new_message"
                        ")";
-    QRegExp regex("SRV:(login|register|get_groups|get_messages|new_message):([^:]*:)*[^:]*");
+    QRegExp regex("SRV\\|(login|register|get_groups|get_messages|new_message)\\|([^\\|]*\\|)*[^\\|]*");
     QRegExpValidator v(regex, nullptr);
     int pos = 0;
 
@@ -102,7 +102,7 @@ int Backend::checkForCommand(QString msg)
 
 int Backend::processCommand(QTcpSocket *clientSocket, QString command)
 {
-    QStringList stringList = command.split(":");
+    QStringList stringList = command.split("|");
     QStringList::Iterator iter = stringList.begin();
     iter++;
 
@@ -120,20 +120,20 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         if (this->userId < 0)
             return -1;
 
-        this->server->sendToClient(clientSocket, "SRV:login:success");
+        this->server->sendToClient(clientSocket, "SRV|login|success");
         return 1;
     } else if (*iter == "get_groups") {
         // TODO: get user id for specific client
         QList<QPair<QString,QString>> groupsList = DbManager::getUserGroups(this->userId);
 
-        QString reply = "SRV:groups:";
+        QString reply = "SRV|groups|";
         for (const auto &group : groupsList) {
             QString id = group.first;
             QString name = group.second;
             reply.append(id);
             reply.append(",");
             reply.append(name);
-            reply.append(":");
+            reply.append("|");
         }
 
         this->server->sendToClient(clientSocket, reply);
@@ -144,7 +144,7 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         QList<QMap<QString,QString>> messages = DbManager::selectMessagesInGroup(groupId.toUInt());
 
         for (const auto &message : messages) {
-            QString reply = "SRV:message:";
+            QString reply = "SRV|message|";
             reply.append(message["user_id"]);
             reply.append(",");
             reply.append(message["content"]);
@@ -164,7 +164,7 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         int messageId = DbManager::postMessageByUser(userId, groupId, content);
         QMap<QString,QString> message = DbManager::selectMessage(messageId);
 
-        QString reply = "SRV:message:";
+        QString reply = "SRV|message|";
         reply.append(message["user_id"]);
         reply.append(",");
         reply.append(message["content"]);

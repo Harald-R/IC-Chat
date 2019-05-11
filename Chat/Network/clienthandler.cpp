@@ -24,12 +24,12 @@ bool ClientHandler::getStatus()
 
 void ClientHandler::requestUserGroups()
 {
-    sendMessage("SRV:get_groups:");
+    sendMessage("SRV|get_groups|");
 }
 
 void ClientHandler::requestMessages(unsigned int group_id)
 {
-    QString msg = "SRV:get_messages:";
+    QString msg = "SRV|get_messages|";
     msg.append(group_id);
     sendMessage(msg);
 }
@@ -61,7 +61,7 @@ void ClientHandler::receivedSomething(QString msg)
 
 int ClientHandler::checkForCommand(QString msg)
 {
-    QRegExp regex("SRV:(groups|message):([^:]*:)*[^:]*");
+    QRegExp regex("SRV\\|(groups|message)\\|([^\\|]*\\|)*[^\\|]*");
     QRegExpValidator v(regex, nullptr);
     int pos = 0;
 
@@ -70,7 +70,7 @@ int ClientHandler::checkForCommand(QString msg)
 
 int ClientHandler::processCommand(QString command)
 {
-    QStringList stringList = command.split(":");
+    QStringList stringList = command.split("|");
     QStringList::Iterator iter = stringList.begin();
     iter++;
 

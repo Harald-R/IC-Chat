@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     clientHandler.connectToServer();
 
     // TODO: replace with actual credentials once login page exists
-    QString  msg = "SRV:login:user_1:password";
+    QString  msg = "SRV|login|user_1|password";
     clientHandler.sendMessage(msg);
 
     // Request groups that the user belongs to

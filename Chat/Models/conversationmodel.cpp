@@ -36,19 +36,18 @@ QHash<int, QByteArray> ConversationModel::roleNames() const
 }
 
 void ConversationModel::insert(QMap<QString,QString> message) {
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-
     // Extract message data
     Message m;
     m.author  = message["author"];
     m.content = message["content"];
     m.date    = message["date"];
-    qDebug() << "==== content: " << m.content << "date: " << m.date;
+
     // Insert into the appropiate place in vector, sorted by date chronologically
     int i = rowCount();
     while (i > 0 && messages_[i-1].date < m.date) --i;
-    messages_.insert(i, m);
 
+    beginInsertRows(QModelIndex(), i, i);
+    messages_.insert(i, m);
     endInsertRows();
 }
 
