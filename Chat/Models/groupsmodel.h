@@ -7,7 +7,7 @@ class GroupsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    enum AnimalRoles {
+    enum GroupRoles {
         IdRole = Qt::UserRole + 1,
         NameRole
     };

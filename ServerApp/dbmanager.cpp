@@ -311,21 +311,62 @@ int DbManager::postMessageByUser(const unsigned int user_id, const unsigned int 
     }
 
     int message_id = addMessage(user_id, group_id, content, creation_time);
-    if (message_id < 0) {
-        return message_id;
-    }
+    return message_id;
+}
+
+QMap<QString, QString> DbManager::selectMessage(const unsigned int message_id)
+{
+    QMap<QString, QString> message;
 
     QSqlQuery query;
-    query.prepare("INSERT INTO group_messages (group_id, message_id) VALUES (:group_id, :message_id)");
-    query.bindValue(":group_id", group_id);
+    query.prepare("SELECT * FROM messages WHERE message_id=:message_id");
     query.bindValue(":message_id", message_id);
 
     if (!query.exec()) {
-        qDebug() << "Failed posting message to group: " << query.lastError();
-        return -1;
+        qDebug() << "Failed selecting message: " << query.lastError();
+        return message;
     }
 
-    return message_id;
+    if (query.next()) {
+        message.insert("user_id", query.value("user_id").toString());
+        message.insert("content", query.value("content").toString());
+        message.insert("creation_time", query.value("creation_time").toString());
+
+        qDebug() << "user_id: " << query.value("user_id").toString().toUtf8().constData() <<
+                    ", content: " << query.value("content").toString().toUtf8().constData() <<
+                    ", creation_time: " << query.value("creation_time").toString().toUtf8().constData();
+    }
+
+    return message;
+}
+
+QList<QMap<QString, QString>> DbManager::selectMessagesInGroup(const unsigned int group_id)
+{
+    QList<QMap<QString, QString>> messages;
+
+    QSqlQuery query;
+    query.prepare("SELECT * FROM messages WHERE group_id=:group_id");
+    query.bindValue(":group_id", group_id);
+
+    if (!query.exec()) {
+        qDebug() << "Failed selecting messages: " << query.lastError();
+        return messages;
+    }
+
+    qDebug() << "Messages in group " << group_id << ":";
+    while (query.next()) {
+        QMap<QString, QString> message;
+        message.insert("user_id", query.value("user_id").toString());
+        message.insert("content", query.value("content").toString());
+        message.insert("creation_time", query.value("creation_time").toString());
+        messages.append(message);
+
+        qDebug() << "user_id: " << query.value("user_id").toString().toUtf8().constData() <<
+                    ", content: " << query.value("content").toString().toUtf8().constData() <<
+                    ", creation_time: " << query.value("creation_time").toString().toUtf8().constData();
+    }
+
+    return messages;
 }
 
 bool DbManager::checkEmailFormat(const QString &email)

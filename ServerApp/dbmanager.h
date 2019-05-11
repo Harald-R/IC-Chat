@@ -137,8 +137,19 @@ public:
      */
     static int postMessageByUser(const unsigned int user_id, const unsigned int group_id, const QString &content, QString creation_time = nullptr);
 
-    // TODO: determine return type
-    static void selectMessagesInGroup(const unsigned int group_id);
+    /**
+     * @brief Select a message from a given group
+     * @param message_id - the id of the mssage to select
+     * @return list of messages
+     */
+    static QMap<QString,QString> selectMessage(const unsigned int message_id);
+
+    /**
+     * @brief Select all messages in a given group
+     * @param group_id - the id of the group from which to select messages from
+     * @return list of messages
+     */
+    static QList<QMap<QString,QString>> selectMessagesInGroup(const unsigned int group_id);
 
 private:
     static bool checkEmailFormat(const QString &email);

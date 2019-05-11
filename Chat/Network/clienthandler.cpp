@@ -1,10 +1,13 @@
 #include "clienthandler.h"
 #include <QRegExpValidator>
 
-ClientHandler::ClientHandler(QObject *parent) : QObject(parent)
+ClientHandler::ClientHandler(GroupsModel *groupsModel, ConversationModel *conversationModel, QObject *parent)
+    : QObject(parent)
 {
-    client = new Client("localhost", 6547);
+    groupsModel_ = groupsModel;
+    conversationModel_ = conversationModel;
 
+    client = new Client("localhost", 6547);
     //setStatus(client->get_status());
 
     connect(client, &Client::hasReadSome, this, &ClientHandler::receivedSomething);
@@ -19,15 +22,26 @@ bool ClientHandler::getStatus()
     return client->getStatus();
 }
 
-void ClientHandler::requestUserGroups(GroupsModel *groupsModel)
+void ClientHandler::requestUserGroups()
 {
-    groupsModel_ = groupsModel;
     sendMessage("SRV:get_groups:");
+}
+
+void ClientHandler::requestMessages(unsigned int group_id)
+{
+    QString msg = "SRV:get_messages:";
+    msg.append(group_id);
+    sendMessage(msg);
+}
+
+void ClientHandler::clearMessages()
+{
+    conversationModel_->clear();
 }
 
 void ClientHandler::setStatus(bool newStatus)
 {
-    qDebug() << "New status is:" << newStatus;
+//    qDebug() << "New status is:" << newStatus;
     if (newStatus)
         { emit statusChanged("CONNECTED"); }
     else
@@ -36,7 +50,6 @@ void ClientHandler::setStatus(bool newStatus)
 
 void ClientHandler::receivedSomething(QString msg)
 {
-    qDebug() << "Received: " << msg;
     if (checkForCommand(msg)) {
         if (!processCommand(msg)) {
             qDebug() << "Unable to process command: " << msg;
@@ -48,7 +61,7 @@ void ClientHandler::receivedSomething(QString msg)
 
 int ClientHandler::checkForCommand(QString msg)
 {
-    QRegExp regex("SRV:groups:([^:]*:)*[^:]*");
+    QRegExp regex("SRV:(groups|message):([^:]*:)*[^:]*");
     QRegExpValidator v(regex, nullptr);
     int pos = 0;
 
@@ -62,6 +75,7 @@ int ClientHandler::processCommand(QString command)
     iter++;
 
     if (*iter == "groups") {
+        // Command that contains a comma-separated list of groups the user belogns to
         iter++;
         QList<QPair<QString,QString>> userGroups = groupsModel_->getUserGroups();
         userGroups.clear();
@@ -78,6 +92,24 @@ int ClientHandler::processCommand(QString command)
             iter++;
         }
         groupsModel_->replaceUserGroups(userGroups);
+        return 1;
+    }
+    else if (*iter == "message") {
+        // Command that contains a message received in a group
+        // TODO: include group info?
+        iter++;
+        qDebug() << "Received message: " << command;
+        QMap<QString,QString> message;
+
+        QString str = *iter;
+        QStringList strSplit = str.split(",");
+
+        message["author"] = strSplit[0];
+        message["content"] = strSplit[1];
+        message["date"] = strSplit[2]; // TODO: concat date that contains : properly
+
+        conversationModel_->insert(message);
+
         return 1;
     }
 

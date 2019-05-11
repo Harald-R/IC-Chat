@@ -2,12 +2,16 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.9
 import QtQuick.Controls 2.4
 
-import SqlDB 1.0
-
 Page {
     id: root
 //    anchors.rightMargin: parent.right
-    property string inConversationWith
+    property string groupId
+    property string groupName
+
+    Component.onCompleted: {
+        clientHandler.clearMessages()
+        clientHandler.sendMessage("SRV:get_messages:" + groupId);
+    }
 
     header: ToolBar {
 //        ToolButton {
@@ -20,7 +24,7 @@ Page {
 
         Label {
             id: pageTitle
-            text: inConversationWith
+            text: groupName
             font.pixelSize: 20
             anchors.centerIn: parent
         }
@@ -38,14 +42,13 @@ Page {
             displayMarginEnd: 40
             verticalLayoutDirection: ListView.BottomToTop
             spacing: 12
-            model: SqlConversationModel {
-                recipient: inConversationWith
-            }
+            model: conversationModel
+
             delegate: Column {
                 anchors.right: sentByMe ? parent.right : undefined
                 spacing: 6
 
-                readonly property bool sentByMe: model.recipient !== "Me"
+                readonly property bool sentByMe: model.author === conversationModel.my_user_id
 
                 Row {
                     id: messageRow
@@ -67,7 +70,7 @@ Page {
 
                         Label {
                             id: messageText
-                            text: model.message
+                            text: model.content
                             color: sentByMe ? "black" : "white"
                             anchors.fill: parent
                             anchors.margins: 12
@@ -78,7 +81,7 @@ Page {
 
                 Label {
                     id: timestampText
-                    text: Qt.formatDateTime(model.timestamp, "d MMM hh:mm")
+                    text: Qt.formatDateTime(model.date, "d MMM hh:mm")
                     color: "lightgrey"
                     anchors.right: sentByMe ? parent.right : undefined
                 }
@@ -113,7 +116,7 @@ Page {
                     text: qsTr("Send")
                     enabled: messageField.length > 0
                     onClicked: {
-                        listView.model.sendMessage(inConversationWith, messageField.text);
+                        clientHandler.sendMessage("SRV:new_message:"+groupId+":"+messageField.text)
                         messageField.text = "";
                     }
                     background: Rectangle{

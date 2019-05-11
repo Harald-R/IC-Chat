@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.9
-import SqlDB 1.0
 
 Page {
     id:root
@@ -10,7 +9,7 @@ Page {
        header: ToolBar {
            id: toolBar
            Label {
-               text: qsTr("Contacts")
+               text: qsTr("Groups")
                transformOrigin: Item.Left
                anchors.verticalCenterOffset: 0
                anchors.horizontalCenterOffset: 0
@@ -47,7 +46,7 @@ Page {
                height: 40 /*avatar.implicitHeight*/
                leftPadding: 72 /*avatar.implicitWidth + 32*/
 
-               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { inConversationWith: model.name })
+               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { groupId: model.id, groupName: model.name })
 
                Image {
                    id: avatar

@@ -30,7 +30,6 @@ int GroupsModel::rowCount(const QModelIndex &parent) const
 
 QVariant GroupsModel::data(const QModelIndex &index, int role) const
 {
-    qDebug() << "data()";
     if (!index.isValid() || index.row() < 0 || index.row() >= rowCount())
         return QVariant();
 

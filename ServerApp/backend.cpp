@@ -86,7 +86,14 @@ void Backend::gotNewMesssage(QTcpSocket *clientSocket, QString msg)
 
 int Backend::checkForCommand(QString msg)
 {
-    QRegExp regex("SRV:(login|register|get_groups):([^:]*:)*[^:]*");
+    QString commands = "("
+                       "login|"
+                       "register|"
+                       "get_groups|"
+                       "get_messages|"
+                       "new_message"
+                       ")";
+    QRegExp regex("SRV:(login|register|get_groups|get_messages|new_message):([^:]*:)*[^:]*");
     QRegExpValidator v(regex, nullptr);
     int pos = 0;
 
@@ -99,7 +106,7 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
     QStringList::Iterator iter = stringList.begin();
     iter++;
 
-    qDebug() << *iter;
+    qDebug() << "Command: " << *iter;
     if (*iter == "login") {
         iter++;
         QString username = *iter;
@@ -130,6 +137,42 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         }
 
         this->server->sendToClient(clientSocket, reply);
+        return 1;
+    } else if (*iter == "get_messages") {
+        iter++;
+        QString groupId = *iter;
+        QList<QMap<QString,QString>> messages = DbManager::selectMessagesInGroup(groupId.toUInt());
+
+        for (const auto &message : messages) {
+            QString reply = "SRV:message:";
+            reply.append(message["user_id"]);
+            reply.append(",");
+            reply.append(message["content"]);
+            reply.append(",");
+            reply.append(message["creation_time"]);
+
+            this->server->sendToClient(clientSocket, reply);
+        }
+
+        return 1;
+    } else if (*iter == "new_message") {
+        iter++;
+        unsigned int groupId = (*iter).toUInt();
+        iter++;
+        QString content = *iter;
+
+        int messageId = DbManager::postMessageByUser(userId, groupId, content);
+        QMap<QString,QString> message = DbManager::selectMessage(messageId);
+
+        QString reply = "SRV:message:";
+        reply.append(message["user_id"]);
+        reply.append(",");
+        reply.append(message["content"]);
+        reply.append(",");
+        reply.append(message["creation_time"]);
+
+        this->server->sendToClient(clientSocket, reply);
+
         return 1;
     } else {
         qDebug() << "Unknown command";
