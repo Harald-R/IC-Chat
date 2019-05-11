@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     Models/conversationmodel.cpp \
     Models/groupsmodel.cpp \
+    Network/authenticator.cpp \
     Network/client.cpp \
     Network/clienthandler.cpp \
     main.cpp
@@ -38,5 +39,6 @@ HEADERS += \
     Models/conversationmodel.h \
     Models/groupsmodel.h \
     Models/message.h \
+    Network/authenticator.h \
     Network/client.h \
     Network/clienthandler.h

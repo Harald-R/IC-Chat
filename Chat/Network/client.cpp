@@ -80,8 +80,8 @@ void Client::closeConnection()
     timeoutTimer->stop();
 
     //qDebug() << tcpSocket->state();
-    disconnect(tcpSocket, &QTcpSocket::connected, 0, 0);
-    disconnect(tcpSocket, &QTcpSocket::readyRead, 0, 0);
+    disconnect(tcpSocket, &QTcpSocket::connected, nullptr, nullptr);
+    disconnect(tcpSocket, &QTcpSocket::readyRead, nullptr, nullptr);
 
     bool shouldEmit = false;
     switch (tcpSocket->state())

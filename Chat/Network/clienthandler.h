@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "client.h"
+#include "authenticator.h"
 #include "../Models/groupsmodel.h"
 #include "../Models/conversationmodel.h"
 
@@ -12,7 +13,8 @@ class ClientHandler : public QObject
     Q_PROPERTY(bool currentStatus READ getStatus NOTIFY statusChanged)
 
 public:
-    explicit ClientHandler(GroupsModel *groupsModel, ConversationModel *conversationModel, QObject *parent = nullptr);
+    explicit ClientHandler(Authenticator *authenticator, GroupsModel *groupsModel,
+                           ConversationModel *conversationModel, QObject *parent = nullptr);
     bool getStatus();
     void requestUserGroups();
     void requestMessages(unsigned int group_id);
@@ -35,6 +37,7 @@ public slots:
 
 private:
     Client *client;
+    Authenticator *authenticator_;
     GroupsModel *groupsModel_;
     ConversationModel *conversationModel_;
 };

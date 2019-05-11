@@ -5,9 +5,18 @@ import QtGraphicalEffects 1.12
 
 Page {
     id: loginCredentials
-    property string username
-    property string password
     visible: false
+//    property string username
+//    property string password
+
+    Connections {
+        target: authenticator
+        onValidCredentials: mainLayout.push("qrc:/MainApplicationWindow.qml")
+        onInvalidCredentials: {
+            invalidLabel.visible = true
+        }
+    }
+
     Rectangle{
         id: backgroundColor
         color: "#273043"
@@ -36,6 +45,28 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
+        }
+    }
+
+    Label {
+        id: invalidLabel
+        visible: false
+        z: 1
+        color: "#fff"
+        text: qsTr("Invalid credentials")
+        styleColor: "#fff"
+        anchors.verticalCenterOffset: -130
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: 0
+        anchors.horizontalCenter: parent.horizontalCenter
+        Rectangle {
+            id: invalidBackground
+            width: 200
+            height: 30
+            color: "#B22222"
+            z: -1
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 
@@ -184,7 +215,7 @@ Page {
         onClicked: {
             //            username = usernameTextArea.getText;
             //            password = passwordTextArea.getText;
-            mainLayout.push("qrc:/MainApplicationWindow.qml")
+            clientHandler.sendMessage("SRV|login|" + usernameTextArea.text + "|" + passwordTextArea.text)
         }
         background: Rectangle{
             id: credentialsButtonBackground

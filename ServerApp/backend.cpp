@@ -75,7 +75,7 @@ void Backend::clientDisconnectedFromServer()
 void Backend::gotNewMesssage(QTcpSocket *clientSocket, QString msg)
 {
     if (checkForCommand(msg)) {
-        if (!processCommand(clientSocket, msg)) {
+        if (processCommand(clientSocket, msg) < 0) {
             qDebug() << "Unable to process command: " << msg;
         }
         return;
@@ -116,13 +116,38 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         int user_id = DbManager::checkCredentials(username, password);
 
         // TODO: map of client_socket -> user_id, since there will be multiple users connected
-        this->userId = user_id;
-        if (this->userId < 0)
-            return -1;
+        if (user_id >= 0)
+            this->userId = user_id;
 
-        this->server->sendToClient(clientSocket, "SRV|login|success");
+        // Send message containing the user id
+        QString reply = "SRV|login|";
+        reply.append(QString::number(user_id));
+        this->server->sendToClient(clientSocket, reply);
+
         return 1;
-    } else if (*iter == "get_groups") {
+    }
+    if (*iter == "register") {
+        iter++;
+        QString username = *iter;
+        iter++;
+        QString password = *iter;
+        iter++;
+        QString email = *iter;
+
+        int user_id = DbManager::addUser(username, password, email);
+
+        // TODO: map of client_socket -> user_id, since there will be multiple users connected
+        if (user_id >= 0)
+            this->userId = user_id;
+
+        // Send message containing the user id
+        QString reply = "SRV|register|";
+        reply.append(QString::number(user_id));
+        this->server->sendToClient(clientSocket, reply);
+
+        return 1;
+    }
+    else if (*iter == "get_groups") {
         // TODO: get user id for specific client
         QList<QPair<QString,QString>> groupsList = DbManager::getUserGroups(this->userId);
 
@@ -138,7 +163,8 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
 
         this->server->sendToClient(clientSocket, reply);
         return 1;
-    } else if (*iter == "get_messages") {
+    }
+    else if (*iter == "get_messages") {
         iter++;
         QString groupId = *iter;
         QList<QMap<QString,QString>> messages = DbManager::selectMessagesInGroup(groupId.toUInt());
@@ -155,7 +181,8 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         }
 
         return 1;
-    } else if (*iter == "new_message") {
+    }
+    else if (*iter == "new_message") {
         iter++;
         unsigned int groupId = (*iter).toUInt();
         iter++;
@@ -174,9 +201,10 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         this->server->sendToClient(clientSocket, reply);
 
         return 1;
-    } else {
+    }
+    else {
         qDebug() << "Unknown command";
     }
 
-    return 0;
+    return -1;
 }

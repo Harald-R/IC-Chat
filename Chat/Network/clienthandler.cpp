@@ -1,9 +1,11 @@
 #include "clienthandler.h"
 #include <QRegExpValidator>
 
-ClientHandler::ClientHandler(GroupsModel *groupsModel, ConversationModel *conversationModel, QObject *parent)
+ClientHandler::ClientHandler(Authenticator *authenticator, GroupsModel *groupsModel,
+                             ConversationModel *conversationModel, QObject *parent)
     : QObject(parent)
 {
+    authenticator_ = authenticator;
     groupsModel_ = groupsModel;
     conversationModel_ = conversationModel;
 
@@ -61,7 +63,7 @@ void ClientHandler::receivedSomething(QString msg)
 
 int ClientHandler::checkForCommand(QString msg)
 {
-    QRegExp regex("SRV\\|(groups|message)\\|([^\\|]*\\|)*[^\\|]*");
+    QRegExp regex("SRV\\|(login|register|groups|message)\\|([^\\|]*\\|)*[^\\|]*");
     QRegExpValidator v(regex, nullptr);
     int pos = 0;
 
@@ -74,7 +76,28 @@ int ClientHandler::processCommand(QString command)
     QStringList::Iterator iter = stringList.begin();
     iter++;
 
-    if (*iter == "groups") {
+    if (*iter == "login") {
+        iter++;
+        qDebug() << "Login status: " << *iter;
+        if (*iter != "-1") {
+            authenticator_->setValidCredentials(true);
+            requestUserGroups();
+            conversationModel_->setmyUserId(*iter);
+        } else {
+            authenticator_->setValidCredentials(false);
+        }
+        return 1;
+    }
+    if (*iter == "login") {
+        iter++;
+        qDebug() << "Register status: " << *iter;
+        if (*iter != "-1") {
+            requestUserGroups();
+            conversationModel_->setmyUserId(*iter);
+        }
+        return 1;
+    }
+    else if (*iter == "groups") {
         // Command that contains a comma-separated list of groups the user belogns to
         iter++;
         QList<QPair<QString,QString>> userGroups = groupsModel_->getUserGroups();

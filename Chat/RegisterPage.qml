@@ -5,8 +5,8 @@ import QtGraphicalEffects 1.12
 
 Page {
     id: registerCredentials
-    property string username
-    property string password
+//    property string username
+//    property string password
 
     Rectangle{
         id: backgroundColor
@@ -136,7 +136,7 @@ Page {
 
 
     Pane {
-        id: confirmPasswordPane
+        id: emailPane
         x: 2
         y: 7
         width: 200
@@ -144,9 +144,9 @@ Page {
         z: 1
         anchors.verticalCenter: parent.verticalCenter
         TextArea {
-            id: confirmPasswordTextArea
-            width: confirmPasswordPane.width
-            height: confirmPasswordPane.height
+            id: emailTextArea
+            width: emailPane.width
+            height: emailPane.height
             text: qsTr("")
             Layout.fillWidth: true
             anchors.centerIn: parent
@@ -158,24 +158,24 @@ Page {
         }
 
         Label {
-            id: confirmPasswordLabel
+            id: emailLabel
             x: 66
             y: -26
             color: "#ffffff"
-            text: qsTr("Confirm Password")
+            text: qsTr("Email")
             styleColor: "#ffffff"
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: -40
             anchors.horizontalCenter: parent.horizontalCenter
             Rectangle {
-                id: confirmPasswordBackground
+                id: emailBackground
                 x: -66
                 y: -4
                 width: 200
                 height: 30
                 color: "#273043"
-                anchors.verticalCenter: confirmPasswordLabel.verticalCenter
-                anchors.horizontalCenter: confirmPasswordLabel.horizontalCenter
+                anchors.verticalCenter: emailLabel.verticalCenter
+                anchors.horizontalCenter: emailLabel.horizontalCenter
                 z: -1
             }
             anchors.horizontalCenterOffset: 0
@@ -229,11 +229,14 @@ Page {
         anchors.verticalCenterOffset: 200
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        enabled: usernameTextArea.length && passwordTextArea.length && confirmPasswordTextArea.length
+        enabled: usernameTextArea.length && passwordTextArea.length && emailTextArea.length
         onClicked: {
             //            username = usernameTextArea.getText;
             //            password = passwordTextArea.getText;
-            mainLayout.push("qrc:/LoginPage.qml")
+
+            // TODO: Check registration data
+            clientHandler.sendMessage("SRV|register|" + usernameTextArea.text + "|" + passwordTextArea.text + "|" + emailTextArea.text)
+            mainLayout.push("qrc:/MainApplicationWindow.qml")
         }
 
         background: Rectangle{
