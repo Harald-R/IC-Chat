@@ -13,6 +13,7 @@ class ConversationModel : public QAbstractListModel
 public:
     enum ConversationRoles {
         AuthorRole = Qt::UserRole + 1,
+        GroupIdRole,
         ContentRole,
         DateRole
     };

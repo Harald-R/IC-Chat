@@ -25,7 +25,7 @@ public slots:
 
 private:
     Server *server;
-    int userId;
+    QMap<QTcpSocket*, unsigned int> userIds;
     int checkForCommand(QString msg);
     int processCommand(QTcpSocket *clientSocket, QString command);
 };

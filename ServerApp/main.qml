@@ -16,10 +16,10 @@ Window {
     Backend {
         id: backend
         onClientConnected: {
-            ti.append(addMsg("Somebody has connected"));
+            ti.append(addMsg("Client has connected"));
         }
         onClientDisconnected: {
-            ti.append(addMsg("Somebody has disconnected"));
+            ti.append(addMsg("Client has disconnected"));
         }
         onNewMessage: {
             ti.append(addMsg("New message: " + msg));

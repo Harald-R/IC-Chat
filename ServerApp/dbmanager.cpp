@@ -329,10 +329,12 @@ QMap<QString, QString> DbManager::selectMessage(const unsigned int message_id)
 
     if (query.next()) {
         message.insert("user_id", query.value("user_id").toString());
+        message.insert("group_id", query.value("group_id").toString());
         message.insert("content", query.value("content").toString());
         message.insert("creation_time", query.value("creation_time").toString());
 
         qDebug() << "user_id: " << query.value("user_id").toString().toUtf8().constData() <<
+                    ", group_id: " << query.value("group_id").toString().toUtf8().constData() <<
                     ", content: " << query.value("content").toString().toUtf8().constData() <<
                     ", creation_time: " << query.value("creation_time").toString().toUtf8().constData();
     }

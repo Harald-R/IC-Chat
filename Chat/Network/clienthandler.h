@@ -17,7 +17,6 @@ public:
                            ConversationModel *conversationModel, QObject *parent = nullptr);
     bool getStatus();
     void requestUserGroups();
-    void requestMessages(unsigned int group_id);
 
 signals:
     void statusChanged(QString newStatus);
@@ -31,9 +30,10 @@ public slots:
     int processCommand(QString command);
     void gotError(QAbstractSocket::SocketError err);
     void sendMessage(QString msg);
+    void requestMessages(QString group_id);
+    void clearMessages();
     void connectToServer();
     void disconnectFromServer();
-    void clearMessages();
 
 private:
     Client *client;

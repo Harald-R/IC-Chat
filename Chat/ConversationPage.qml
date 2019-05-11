@@ -10,7 +10,7 @@ Page {
 
     Component.onCompleted: {
         clientHandler.clearMessages()
-        clientHandler.sendMessage("SRV|get_messages|" + groupId);
+        clientHandler.requestMessages(groupId)
     }
 
     header: ToolBar {

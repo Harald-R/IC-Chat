@@ -20,6 +20,7 @@ QVariant ConversationModel::data(const QModelIndex &index, int role) const
 
     const Message &message = messages_.at(index.row());
     if (role == AuthorRole) return message.author;
+    if (role == GroupIdRole) return message.group_id;
     if (role == ContentRole) return message.content;
     if (role == DateRole) return message.date;
 
@@ -29,18 +30,25 @@ QVariant ConversationModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> ConversationModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[AuthorRole] = "author";
+    roles[AuthorRole]  = "author";
+    roles[GroupIdRole] = "group_id";
     roles[ContentRole] = "content";
-    roles[DateRole] = "date";
+    roles[DateRole]    = "date";
     return roles;
 }
 
 void ConversationModel::insert(QMap<QString,QString> message) {
     // Extract message data
     Message m;
-    m.author  = message["author"];
-    m.content = message["content"];
-    m.date    = message["date"];
+    m.author   = message["author"];
+    m.group_id = message["group_id"];
+    m.content  = message["content"];
+    m.date     = message["date"];
+
+    if (groupId_ != m.group_id) {
+        qDebug() << "New message received in group: " << m.group_id;
+        return;
+    }
 
     // Insert into the appropiate place in vector, sorted by date chronologically
     int i = rowCount();

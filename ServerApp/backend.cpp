@@ -93,7 +93,10 @@ int Backend::checkForCommand(QString msg)
                        "get_messages|"
                        "new_message"
                        ")";
-    QRegExp regex("SRV\\|(login|register|get_groups|get_messages|new_message)\\|([^\\|]*\\|)*[^\\|]*");
+    QString rx = "SRV\\|";
+    rx.append(commands);
+    rx.append("\\|([^\\|]*\\|)*[^\\|]*");
+    QRegExp regex(rx);
     QRegExpValidator v(regex, nullptr);
     int pos = 0;
 
@@ -115,9 +118,8 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
 
         int user_id = DbManager::checkCredentials(username, password);
 
-        // TODO: map of client_socket -> user_id, since there will be multiple users connected
         if (user_id >= 0)
-            this->userId = user_id;
+            this->userIds[clientSocket] = user_id;
 
         // Send message containing the user id
         QString reply = "SRV|login|";
@@ -136,9 +138,8 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
 
         int user_id = DbManager::addUser(username, password, email);
 
-        // TODO: map of client_socket -> user_id, since there will be multiple users connected
         if (user_id >= 0)
-            this->userId = user_id;
+            this->userIds[clientSocket] = user_id;
 
         // Send message containing the user id
         QString reply = "SRV|register|";
@@ -148,8 +149,7 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         return 1;
     }
     else if (*iter == "get_groups") {
-        // TODO: get user id for specific client
-        QList<QPair<QString,QString>> groupsList = DbManager::getUserGroups(this->userId);
+        QList<QPair<QString,QString>> groupsList = DbManager::getUserGroups(this->userIds[clientSocket]);
 
         QString reply = "SRV|groups|";
         for (const auto &group : groupsList) {
@@ -173,6 +173,8 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
             QString reply = "SRV|message|";
             reply.append(message["user_id"]);
             reply.append(",");
+            reply.append(groupId);
+            reply.append(",");
             reply.append(message["content"]);
             reply.append(",");
             reply.append(message["creation_time"]);
@@ -188,17 +190,29 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         iter++;
         QString content = *iter;
 
-        int messageId = DbManager::postMessageByUser(userId, groupId, content);
-        QMap<QString,QString> message = DbManager::selectMessage(messageId);
+        int messageId = DbManager::postMessageByUser(this->userIds[clientSocket], groupId, content);
+        if (messageId < 0) {
+            QString reply = "SRV|message|-1|Could not add message: ";
+            reply.append(content);
+            this->server->sendToClient(clientSocket, reply);
+
+            return 1;
+        }
+        QMap<QString,QString> message = DbManager::selectMessage(static_cast<unsigned int>(messageId));
 
         QString reply = "SRV|message|";
         reply.append(message["user_id"]);
+        reply.append(",");
+        reply.append(message["group_id"]);
         reply.append(",");
         reply.append(message["content"]);
         reply.append(",");
         reply.append(message["creation_time"]);
 
-        this->server->sendToClient(clientSocket, reply);
+        // TODO: only send to users that are part of the group
+        for (const auto client : this->userIds.keys()) {
+            this->server->sendToClient(client, reply);
+        }
 
         return 1;
     }

@@ -9,6 +9,7 @@ public:
     Message() {}
 
     QString author;
+    QString group_id;
     QString content;
     QString date;
 };

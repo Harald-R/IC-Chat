@@ -14,7 +14,6 @@ ClientHandler::ClientHandler(Authenticator *authenticator, GroupsModel *groupsMo
 
     connect(client, &Client::hasReadSome, this, &ClientHandler::receivedSomething);
     connect(client, &Client::statusChanged, this, &ClientHandler::setStatus);
-    // TODO: change this connection to the new syntax
     connect(client->tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(gotError(QAbstractSocket::SocketError)));
 }
@@ -29,11 +28,13 @@ void ClientHandler::requestUserGroups()
     sendMessage("SRV|get_groups|");
 }
 
-void ClientHandler::requestMessages(unsigned int group_id)
+void ClientHandler::requestMessages(QString group_id)
 {
     QString msg = "SRV|get_messages|";
     msg.append(group_id);
     sendMessage(msg);
+
+    conversationModel_->setGroupId(group_id);
 }
 
 void ClientHandler::clearMessages()
@@ -128,8 +129,9 @@ int ClientHandler::processCommand(QString command)
         QStringList strSplit = str.split(",");
 
         message["author"] = strSplit[0];
-        message["content"] = strSplit[1];
-        message["date"] = strSplit[2]; // TODO: concat date that contains : properly
+        message["group_id"] = strSplit[1];
+        message["content"] = strSplit[2];
+        message["date"] = strSplit[3];
 
         conversationModel_->insert(message);
 
