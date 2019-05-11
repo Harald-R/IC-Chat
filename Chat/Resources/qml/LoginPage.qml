@@ -11,7 +11,7 @@ Page {
 
     Connections {
         target: authenticator
-        onValidCredentials: mainLayout.push("qrc:/MainApplicationWindow.qml")
+        onValidCredentials: mainLayout.push("qrc:/Resources/qml/MainApplicationWindow.qml")
         onInvalidCredentials: {
             invalidLabel.visible = true
         }
@@ -82,7 +82,7 @@ Page {
             id: usernameTextArea
             width: usernamePane.width
             height: usernamePane.height
-            text: qsTr("")
+            text: qsTr("user_1") //qsTr("")
             Layout.fillWidth: true
             anchors.centerIn: parent
             background: Rectangle{
@@ -128,7 +128,7 @@ Page {
             id: passwordTextArea
             width: passwordPane.width
             height: passwordPane.height
-            text: qsTr("")
+            text: qsTr("password") //qsTr("")
             Layout.fillWidth: true
             anchors.centerIn: parent
             background: Rectangle{
@@ -246,6 +246,19 @@ Page {
         anchors.leftMargin: 20
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: 200
-        onClicked: mainLayout.push("qrc:/RegisterPage.qml")
+        onClicked: mainLayout.push("qrc:/Resources/qml/RegisterPage.qml")
+        DropShadow{
+            id: registrationButtonRectShadow
+            anchors.fill: source
+            cached: true
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 8.0
+            samples: 16
+            color: "#80000000"
+            smooth: true
+            source: parent
+
+        }
     }
 }

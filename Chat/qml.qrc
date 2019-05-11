@@ -1,11 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>download.png</file>
-        <file>ContactPage.qml</file>
-        <file>ConversationPage.qml</file>
-        <file>LoginPage.qml</file>
-        <file>RegisterPage.qml</file>
-        <file>MainApplicationWindow.qml</file>
+        <file>Resources/qml/ContactPage.qml</file>
+        <file>Resources/qml/ConversationPage.qml</file>
+        <file>Resources/qml/LoginPage.qml</file>
+        <file>Resources/qml/main.qml</file>
+        <file>Resources/qml/MainApplicationWindow.qml</file>
+        <file>Resources/qml/RegisterPage.qml</file>
+        <file>Resources/images/download.png</file>
+        <file>Resources/images/search.svg</file>
     </qresource>
 </RCC>

@@ -28,8 +28,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("clientHandler", &clientHandler);
     engine.rootContext()->setContextProperty(QStringLiteral("authenticator"), &authenticator);
 
-//    qmlRegisterType<Authenticator>("client.authenticator", 1, 0, "Authenticator");
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/Resources/qml/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 

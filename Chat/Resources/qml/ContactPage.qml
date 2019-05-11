@@ -6,19 +6,19 @@ Page {
     id:root
     width: 300
     anchors.fill: parent
-       header: ToolBar {
-           id: toolBar
-           Label {
-               text: qsTr("Groups")
-               transformOrigin: Item.Left
-               anchors.verticalCenterOffset: 0
-               anchors.horizontalCenterOffset: 0
-               anchors.left: parent.left
-               anchors.leftMargin: 0
-               font.pixelSize: 20
-               anchors.centerIn: parent
-               }
-           }
+    header: ToolBar {
+        id: toolBar
+        Label {
+            text: qsTr("Groups")
+            transformOrigin: Item.Left
+            anchors.verticalCenterOffset: 0
+            anchors.horizontalCenterOffset: 0
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            font.pixelSize: 20
+            anchors.centerIn: parent
+        }
+    }
 
     ListView {
            id: listView
@@ -46,7 +46,7 @@ Page {
                height: 40 /*avatar.implicitHeight*/
                leftPadding: 72 /*avatar.implicitWidth + 32*/
 
-               onClicked: rightGridView.push("qrc:/ConversationPage.qml", { groupId: model.id, groupName: model.name })
+               onClicked: rightGridView.push("qrc:/Resources/qml/ConversationPage.qml", { groupId: model.id, groupName: model.name })
 
                Image {
                    id: avatar
@@ -54,7 +54,7 @@ Page {
                    height: 40
                    fillMode:Image.PreserveAspectFit
 
-                   source: "qrc:/download.png"/* + modelData.replace(" ", "_") + ".png"*/
+                   source: "qrc:/Resources/images/download.png"/* + modelData.replace(" ", "_") + ".png"*/
                 }
 
            }

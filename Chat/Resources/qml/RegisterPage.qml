@@ -236,7 +236,7 @@ Page {
 
             // TODO: Check registration data
             clientHandler.sendMessage("SRV|register|" + usernameTextArea.text + "|" + passwordTextArea.text + "|" + emailTextArea.text)
-            mainLayout.push("qrc:/MainApplicationWindow.qml")
+            mainLayout.push("qrc:/Resources/qml/MainApplicationWindow.qml")
         }
 
         background: Rectangle{

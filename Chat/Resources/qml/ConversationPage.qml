@@ -59,7 +59,7 @@ Page {
                         id: avatar
                         width: 40
                         height: 40
-                        source: !sentByMe ? "qrc:/download.png" : ""/* + model.author.replace(" ", "_") + ".png" : ""*/
+                        source: !sentByMe ? "qrc:/Resources/images/download.png" : ""/* + model.author.replace(" ", "_") + ".png" : ""*/
                     }
 
                     Rectangle {
