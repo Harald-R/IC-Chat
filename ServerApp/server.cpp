@@ -53,8 +53,9 @@ void Server::readClient()
 
 void Server::gotDisconnection()
 {
-    clients.removeAt(clients.indexOf(static_cast<QTcpSocket*>(sender())));
-    emit clientDisconnected();
+    QTcpSocket *clientSocket = static_cast<QTcpSocket*>(sender());
+    clients.removeAt(clients.indexOf(clientSocket));
+    emit clientDisconnected(clientSocket);
 }
 
 qint64 Server::sendToClient(QTcpSocket *socket, const QString &str)

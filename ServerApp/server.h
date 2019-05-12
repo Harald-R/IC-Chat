@@ -23,7 +23,7 @@ public slots:
 
 signals:
     void gotNewMesssage(QTcpSocket *clientSocket, QString msg);
-    void clientDisconnected();
+    void clientDisconnected(QTcpSocket *clientSocket);
 
 private:
     quint16 m_nNextBlockSize;

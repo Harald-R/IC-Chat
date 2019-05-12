@@ -67,8 +67,9 @@ void Backend::clientConnectedToServer()
     emit clientConnected();
 }
 
-void Backend::clientDisconnectedFromServer()
+void Backend::clientDisconnectedFromServer(QTcpSocket *clientSocket)
 {
+    clientInfos_.remove(clientSocket);
     emit clientDisconnected();
 }
 
@@ -119,7 +120,7 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         int user_id = DbManager::checkCredentials(username, password);
 
         if (user_id >= 0)
-            this->userIds[clientSocket] = user_id;
+            this->clientInfos_[clientSocket] = getClientInfo(user_id);
 
         // Send message containing the user id
         QString reply = "SRV|login|";
@@ -139,7 +140,7 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         int user_id = DbManager::addUser(username, password, email);
 
         if (user_id >= 0)
-            this->userIds[clientSocket] = user_id;
+            this->clientInfos_[clientSocket] = getClientInfo(user_id);
 
         // Send message containing the user id
         QString reply = "SRV|register|";
@@ -149,7 +150,7 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         return 1;
     }
     else if (*iter == "get_groups") {
-        QList<QPair<QString,QString>> groupsList = DbManager::getUserGroups(this->userIds[clientSocket]);
+        QList<QPair<QString,QString>> groupsList = DbManager::getUserGroups(this->clientInfos_[clientSocket].userId);
 
         QString reply = "SRV|groups|";
         for (const auto &group : groupsList) {
@@ -190,7 +191,8 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         iter++;
         QString content = *iter;
 
-        int messageId = DbManager::postMessageByUser(this->userIds[clientSocket], groupId, content);
+        int messageId = DbManager::postMessageByUser(this->clientInfos_[clientSocket].userId, groupId, content);
+
         if (messageId < 0) {
             QString reply = "SRV|message|-1|Could not add message: ";
             reply.append(content);
@@ -209,9 +211,10 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
         reply.append(",");
         reply.append(message["creation_time"]);
 
-        // TODO: only send to users that are part of the group
-        for (const auto client : this->userIds.keys()) {
-            this->server->sendToClient(client, reply);
+        // Send to all connected clients in that group
+        for (const auto client : this->clientInfos_.keys()) {
+            if (this->clientInfos_[client].groups.contains(groupId))
+                this->server->sendToClient(client, reply);
         }
 
         return 1;
@@ -221,4 +224,17 @@ int Backend::processCommand(QTcpSocket *clientSocket, QString command)
     }
 
     return -1;
+}
+
+ClientInfo Backend::getClientInfo(unsigned int user_id)
+{
+    QList<QPair<QString,QString>> userGroups = DbManager::getUserGroups(user_id);
+    QList<unsigned int> groups;
+
+    for (const auto &group : userGroups) {
+        groups.append(group.first.toUInt());
+    }
+
+    ClientInfo info(user_id, groups);
+    return info;
 }

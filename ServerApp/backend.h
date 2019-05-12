@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "server.h"
+#include "clientinfo.h"
 
 class Backend : public QObject
 {
@@ -20,14 +21,16 @@ public slots:
     QString startClicked();
     QString testClicked();
     void clientConnectedToServer();
-    void clientDisconnectedFromServer();
+    void clientDisconnectedFromServer(QTcpSocket *clientSocket);
     void gotNewMesssage(QTcpSocket *clientSocket, QString msg);
 
 private:
-    Server *server;
-    QMap<QTcpSocket*, unsigned int> userIds;
     int checkForCommand(QString msg);
     int processCommand(QTcpSocket *clientSocket, QString command);
+    ClientInfo getClientInfo(unsigned int user_id);
+
+    Server *server;
+    QMap<QTcpSocket*, ClientInfo> clientInfos_;
 };
 
 #endif // BACKEND_H

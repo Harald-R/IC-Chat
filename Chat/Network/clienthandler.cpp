@@ -89,7 +89,7 @@ int ClientHandler::processCommand(QString command)
         }
         return 1;
     }
-    if (*iter == "login") {
+    else if (*iter == "register") {
         iter++;
         qDebug() << "Register status: " << *iter;
         if (*iter != "-1") {

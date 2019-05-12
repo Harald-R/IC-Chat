@@ -69,7 +69,7 @@ public:
     /**
      * @brief Get user groups
      * @param user_id - id of user to get groups for
-     * @return int - group_id of new group; negative in case of error
+     * @return list - group ids and names of the groups the user belongs to
      */
     static QList<QPair<QString,QString>> getUserGroups(const unsigned int user_id);
 

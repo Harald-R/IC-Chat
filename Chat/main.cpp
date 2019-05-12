@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("groupsModel", &groupsModel);
     engine.rootContext()->setContextProperty("conversationModel", &conversationModel);
     engine.rootContext()->setContextProperty("clientHandler", &clientHandler);
-    engine.rootContext()->setContextProperty(QStringLiteral("authenticator"), &authenticator);
+    engine.rootContext()->setContextProperty("authenticator", &authenticator);
 
     engine.load(QUrl(QStringLiteral("qrc:/Resources/qml/main.qml")));
     if (engine.rootObjects().isEmpty())
