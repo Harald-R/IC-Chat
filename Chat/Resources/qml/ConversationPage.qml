@@ -2,12 +2,16 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.9
 import QtQuick.Controls 2.4
 
-import SqlDB 1.0
-
 Page {
     id: root
 //    anchors.rightMargin: parent.right
-    property string inConversationWith
+    property string groupId
+    property string groupName
+
+    Component.onCompleted: {
+        clientHandler.clearMessages()
+        clientHandler.requestMessages(groupId)
+    }
 
     header: ToolBar {
 //        ToolButton {
@@ -20,8 +24,8 @@ Page {
 
         Label {
             id: pageTitle
-            text: inConversationWith
-            font.pixelSize: 20
+            text: groupName
+            font.pixelSize: 17
             anchors.centerIn: parent
         }
     }
@@ -38,14 +42,13 @@ Page {
             displayMarginEnd: 40
             verticalLayoutDirection: ListView.BottomToTop
             spacing: 12
-            model: SqlConversationModel {
-                recipient: inConversationWith
-            }
+            model: conversationModel
+
             delegate: Column {
                 anchors.right: sentByMe ? parent.right : undefined
                 spacing: 6
 
-                readonly property bool sentByMe: model.recipient !== "Me"
+                readonly property bool sentByMe: model.author === conversationModel.my_user_id
 
                 Row {
                     id: messageRow
@@ -56,18 +59,18 @@ Page {
                         id: avatar
                         width: 40
                         height: 40
-                        source: !sentByMe ? "qrc:/download.png" : ""/* + model.author.replace(" ", "_") + ".png" : ""*/
+                        source: !sentByMe ? "qrc:/Resources/images/download.png" : ""/* + model.author.replace(" ", "_") + ".png" : ""*/
                     }
 
                     Rectangle {
                         width: Math.min(messageText.implicitWidth + 24,
                             listView.width - (!sentByMe ? avatar.width + messageRow.spacing : 0))
                         height: messageText.implicitHeight + 24
-                        color: sentByMe ? "lightgrey" : "#273043"
+                        color: sentByMe ? "lightgrey" : "#4592af"
 
                         Label {
                             id: messageText
-                            text: model.message
+                            text: model.content
                             color: sentByMe ? "black" : "white"
                             anchors.fill: parent
                             anchors.margins: 12
@@ -78,7 +81,7 @@ Page {
 
                 Label {
                     id: timestampText
-                    text: Qt.formatDateTime(model.timestamp, "d MMM hh:mm")
+                    text: Qt.formatDateTime(model.date, "d MMM hh:mm")
                     color: "lightgrey"
                     anchors.right: sentByMe ? parent.right : undefined
                 }
@@ -94,8 +97,6 @@ Page {
                 id: textInputBackground
                 anchors.fill: parent
                 color: "#e2e2e2"
-                border.color: "#000000"
-                border.width: 1
             }
 
             RowLayout {
@@ -113,13 +114,13 @@ Page {
                     text: qsTr("Send")
                     enabled: messageField.length > 0
                     onClicked: {
-                        listView.model.sendMessage(inConversationWith, messageField.text);
+                        clientHandler.sendMessage("SRV|new_message|"+groupId+"|"+messageField.text)
                         messageField.text = "";
                     }
                     background: Rectangle{
                        id:sendButtonBackground
                        border.width: 1
-                       border.color: sendButton.enabled ? "#000000" : "#cccccc"
+                       border.color: sendButton.enabled ? "#e2e2e2" : "#cccccc"
                     }
                 }
             }
