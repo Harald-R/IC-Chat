@@ -66,12 +66,12 @@ Page {
                         width: Math.min(messageText.implicitWidth + 24,
                             listView.width - (!sentByMe ? avatar.width + messageRow.spacing : 0))
                         height: messageText.implicitHeight + 24
-                        color: sentByMe ? "lightgrey" : "#4592af"
+                        color: sentByMe ? "#4592af" : "lightgrey"
 
                         Label {
                             id: messageText
                             text: model.content
-                            color: sentByMe ? "black" : "white"
+                            color: sentByMe ? "white" : "black"
                             anchors.fill: parent
                             anchors.margins: 12
                             wrapMode: Label.Wrap
