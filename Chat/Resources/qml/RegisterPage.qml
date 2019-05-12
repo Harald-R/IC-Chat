@@ -177,7 +177,7 @@ Page {
         text: qsTr("Register")
         font.bold: true
         horizontalAlignment: Text.AlignHCenter
-        anchors.top: loginTextBackground.bottom
+        anchors.top: registerTextBackground.bottom
         anchors.topMargin: -50
         anchors.horizontalCenter: parent.horizontalCenter
         font.pixelSize: 30
