@@ -5,37 +5,23 @@ import QtGraphicalEffects 1.12
 
 Page {
     id: registerCredentials
-//    property string username
-//    property string password
 
     Rectangle{
         id: backgroundColor
-        color: "#273043"
+        color: "#EFEEEE"
         z: -2
         anchors.fill: parent
-
         Rectangle {
             id: foregroundBackgroundColor
             x: 220
             width: 300
-            color: "#EFF6EE"
+            color: "#EFEEEE"
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 40
             anchors.top: parent.top
             anchors.topMargin: 60
             Layout.fillHeight: true
             anchors.horizontalCenter: parent.horizontalCenter
-            Rectangle{
-                id: foregroundShadow
-                width: foregroundBackgroundColor.width
-                height: foregroundBackgroundColor.height
-                color: "#7EA8BE"
-                z: -1
-                anchors.verticalCenterOffset: 5
-                anchors.horizontalCenterOffset: 5
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-            }
         }
     }
 
@@ -47,18 +33,15 @@ Page {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
 
-        TextArea {
+        TextField {
             id: usernameTextArea
             width: usernamePane.width
             height: usernamePane.height
             text: qsTr("")
             Layout.fillWidth: true
             anchors.centerIn: parent
-            background: Rectangle{
-                id: usernameTextAreaBackground
-                border.width: 1
-                border.color: "#000000"
-            }
+            wrapMode: TextEdit.Wrap
+            clip: true
         }
 
         Label {
@@ -68,7 +51,7 @@ Page {
             color: "#ffffff"
             text: qsTr("Username")
             styleColor: "#ffffff"
-            anchors.verticalCenterOffset: -40
+            anchors.verticalCenterOffset: -45
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
@@ -76,8 +59,8 @@ Page {
             Rectangle {
                 id: usernameBackground
                 width: 200
-                height: 30
-                color: "#9197AE"
+                height: 40
+                color: "#4592af"
                 z: -1
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -93,18 +76,16 @@ Page {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
 
-        TextArea {
+        TextField {
             id: passwordTextArea
             width: passwordPane.width
             height: passwordPane.height
             text: qsTr("")
             Layout.fillWidth: true
             anchors.centerIn: parent
-            background: Rectangle{
-                id: passwordTextAreaBackground
-                border.width: 1
-                border.color: "#000000"
-            }
+            wrapMode: TextEdit.Wrap
+            clip: true
+            echoMode: TextInput.Password
         }
 
         Label {
@@ -114,7 +95,7 @@ Page {
             color: "#ffffff"
             text: qsTr("Password")
             styleColor: "#ffffff"
-            anchors.verticalCenterOffset: -40
+            anchors.verticalCenterOffset: -45
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
@@ -124,8 +105,8 @@ Page {
                 x: -66
                 y: -4
                 width: 200
-                height: 30
-                color: "#273043"
+                height: 40
+                color: "#4592af"
                 z: -1
                 anchors.horizontalCenter: passwordLabel.horizontalCenter
                 anchors.verticalCenter: passwordLabel.verticalCenter
@@ -137,24 +118,21 @@ Page {
 
     Pane {
         id: emailPane
-        x: 2
-        y: 7
         width: 200
         height: 50
         z: 1
+        anchors.verticalCenterOffset: 150
         anchors.verticalCenter: parent.verticalCenter
-        TextArea {
+        anchors.horizontalCenter: parent.horizontalCenter
+        TextField {
             id: emailTextArea
             width: emailPane.width
             height: emailPane.height
             text: qsTr("")
             Layout.fillWidth: true
             anchors.centerIn: parent
-            background: Rectangle{
-                id: confirmPasswordTextAreaBackground
-                border.width: 1
-                border.color: "#000000"
-            }
+            wrapMode: TextEdit.Wrap
+            clip: true
         }
 
         Label {
@@ -165,22 +143,30 @@ Page {
             text: qsTr("Email")
             styleColor: "#ffffff"
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -40
+            anchors.verticalCenterOffset: -45
             anchors.horizontalCenter: parent.horizontalCenter
             Rectangle {
                 id: emailBackground
                 x: -66
                 y: -4
                 width: 200
-                height: 30
-                color: "#273043"
+                height: 40
+                color: "#4592af"
                 anchors.verticalCenter: emailLabel.verticalCenter
                 anchors.horizontalCenter: emailLabel.horizontalCenter
                 z: -1
             }
             anchors.horizontalCenterOffset: 0
         }
-        anchors.verticalCenterOffset: 130
+    }
+
+    Rectangle {
+        id: registerTextBackground
+        width: parent.width
+        height: 150
+        color: "#33313b"
+        z: -1
+        anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
@@ -191,72 +177,41 @@ Page {
         text: qsTr("Register")
         font.bold: true
         horizontalAlignment: Text.AlignHCenter
-        anchors.verticalCenterOffset: -200
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: loginTextBackground.bottom
+        anchors.topMargin: -50
         anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: 25
-
-        Rectangle {
-            id: registerTextBackground
-            width: 200
-            height: 30
-            color: "#7EA8BE"
-            z: -1
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            Rectangle{
-                id: registerTextBackgroundShadow
-
-                width: parent.width
-                height: parent.height
-                color: "#273043"
-                z: -1
-                anchors.verticalCenterOffset: 3
-                anchors.horizontalCenterOffset: 3
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
+        font.pixelSize: 30
+        color: "#FFF"
     }
 
     Button {
-        id: credentialsButton
+        id: registerButton
         x: 278
         y: 391
         height: 50
-        width: 200
+        width: 150
         text: qsTr("Register")
-        anchors.verticalCenterOffset: 200
+        anchors.verticalCenterOffset: 220
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         enabled: usernameTextArea.length && passwordTextArea.length && emailTextArea.length
         onClicked: {
-            //            username = usernameTextArea.getText;
-            //            password = passwordTextArea.getText;
-
             // TODO: Check registration data
             clientHandler.sendMessage("SRV|register|" + usernameTextArea.text + "|" + passwordTextArea.text + "|" + emailTextArea.text)
             mainLayout.push("qrc:/Resources/qml/MainApplicationWindow.qml")
         }
-
         background: Rectangle{
-            id: credentialsButtonBackground
+            id: registerButtonBackground
             anchors.fill: parent
-            color: credentialsButton.enabled ? "#7EA8BE" : "#EFF6EE"
-            border.color: "#000000"
-            border.width: 1
-            Rectangle{
-                id: credentialsButtonBackgroundShadow
-
-                width: parent.width
-                height: parent.height
-                color: credentialsButton.enabled ? "#273043" : "#EFF6EE"
-                z: -1
-                anchors.verticalCenterOffset: 3
-                anchors.horizontalCenterOffset: 3
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-            }
+            color: registerButton.enabled ? "#4592af" : "#DDD"
+        }
+        contentItem: Text {
+            renderType: Text.NativeRendering
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            color: "white"
+            text: registerButton.text
         }
     }
 }

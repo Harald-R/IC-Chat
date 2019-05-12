@@ -15,7 +15,7 @@ Page {
             anchors.horizontalCenterOffset: 0
             anchors.left: parent.left
             anchors.leftMargin: 0
-            font.pixelSize: 20
+            font.pixelSize: 17
             anchors.centerIn: parent
         }
     }
@@ -24,28 +24,28 @@ Page {
            id: listView
            width: 300
            anchors.fill: parent
-           topMargin: 48
-           leftMargin: 48
-           bottomMargin: 48
-           rightMargin: 48
-           spacing: 15
+           spacing: 10
            model: groupsModel //["User1", "User2", "User3"]
            delegate: ItemDelegate {
                id: itemDelegate
                background: Rectangle{
-                    id: userItemBackground
-                    anchors.centerIn: parent
-                    width: parent.width + 5
-                    height: parent.height + 5
-                    color: itemDelegate.down ? "#ffffff" : "#EFF6EE"
-                    radius: 4
+                   id: userItemBackground
+                   anchors.centerIn: parent
+                   width: parent.width
+                   height: parent.height + 10
+                   color: itemDelegate.down ? "#ffffff" : "#efefef"
+                   border.color: "#ddd"
+                   border.width: 1
+               }
+               contentItem: Text {
+                   text: itemDelegate.text
+                   color: "#33313b"
                }
 
                text: model.name
                width: listView.width - listView.leftMargin - listView.rightMargin
-               height: 40 /*avatar.implicitHeight*/
-               leftPadding: 72 /*avatar.implicitWidth + 32*/
-
+               height: avatar.height
+               leftPadding: avatar.width + 32
                onClicked: rightGridView.push("qrc:/Resources/qml/ConversationPage.qml", { groupId: model.id, groupName: model.name })
 
                Image {
@@ -63,7 +63,7 @@ Page {
 
        Rectangle {
            id: background
-           color: "#273043"
+           color: "#33313b"
            z: -1
            anchors.fill: parent
        }

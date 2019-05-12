@@ -25,7 +25,7 @@ Page {
         Label {
             id: pageTitle
             text: groupName
-            font.pixelSize: 20
+            font.pixelSize: 17
             anchors.centerIn: parent
         }
     }
@@ -66,7 +66,7 @@ Page {
                         width: Math.min(messageText.implicitWidth + 24,
                             listView.width - (!sentByMe ? avatar.width + messageRow.spacing : 0))
                         height: messageText.implicitHeight + 24
-                        color: sentByMe ? "lightgrey" : "#273043"
+                        color: sentByMe ? "lightgrey" : "#4592af"
 
                         Label {
                             id: messageText
@@ -97,8 +97,6 @@ Page {
                 id: textInputBackground
                 anchors.fill: parent
                 color: "#e2e2e2"
-                border.color: "#000000"
-                border.width: 1
             }
 
             RowLayout {
@@ -122,7 +120,7 @@ Page {
                     background: Rectangle{
                        id:sendButtonBackground
                        border.width: 1
-                       border.color: sendButton.enabled ? "#000000" : "#cccccc"
+                       border.color: sendButton.enabled ? "#e2e2e2" : "#cccccc"
                     }
                 }
             }
