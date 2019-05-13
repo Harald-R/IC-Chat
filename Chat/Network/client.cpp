@@ -3,7 +3,7 @@
 Client::Client(const QString hostAddress, int portNumber) : QObject(), m_nNextBlockSize(0)
 {
     status = false;
-    tcpSocket = new QTcpSocket();
+    serverSocket = new QSslSocket();
 
     host = hostAddress;
     port = portNumber;
@@ -12,49 +12,64 @@ Client::Client(const QString hostAddress, int portNumber) : QObject(), m_nNextBl
     timeoutTimer->setSingleShot(true);
     connect(timeoutTimer, &QTimer::timeout, this, &Client::connectionTimeout);
 
-    connect(tcpSocket, &QTcpSocket::disconnected, this, &Client::closeConnection);
+    connect(serverSocket, &QSslSocket::disconnected, this, &Client::closeConnection);
 }
 
-void Client::connect2host()
+void Client::connectToHost()
 {
+    qDebug() << "connectToHost";
     timeoutTimer->start(3000);
 
-    tcpSocket->connectToHost(host, port);
-    connect(tcpSocket, &QTcpSocket::connected, this, &Client::connected);
-    connect(tcpSocket, &QTcpSocket::readyRead, this, &Client::readyRead);
+    serverSocket->ignoreSslErrors();
+    connect(serverSocket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sslError(QList<QSslError>)));
+
+    serverSocket->connectToHostEncrypted(host, port);
+    connect(serverSocket, &QSslSocket::connected, this, &Client::connected);
+    connect(serverSocket, &QSslSocket::readyRead, this, &Client::readyRead);
 }
 
 void Client::connectionTimeout()
 {
-    //qDebug() << tcpSocket->state();
-    if(tcpSocket->state() == QAbstractSocket::ConnectingState)
+    qDebug() << "connectionTimeout";
+    qDebug() << serverSocket->state();
+    if(serverSocket->state() == QAbstractSocket::ConnectingState)
     {
-        tcpSocket->abort();
-        emit tcpSocket->error(QAbstractSocket::SocketTimeoutError);
+        serverSocket->abort();
+        emit serverSocket->error(QAbstractSocket::SocketTimeoutError);
     }
+}
+
+void Client::sslError(QList<QSslError> errors)
+{
+    qDebug() << "sslError";
 }
 
 void Client::connected()
 {
+    qDebug() << "connected";
     status = true;
     emit statusChanged(status);
 }
 
-bool Client::getStatus() {return status;}
+bool Client::getStatus()
+{
+    return status;
+}
 
 void Client::readyRead()
 {
-    QDataStream in(tcpSocket);
+    qDebug() << "readyRead";
+    QDataStream in(serverSocket);
     //in.setVersion(QDataStream::Qt_5_10);
     for (;;)
     {
         if (!m_nNextBlockSize)
         {
-            if (tcpSocket->bytesAvailable() < sizeof(quint16)) { break; }
+            if (serverSocket->bytesAvailable() < sizeof(quint16)) { break; }
             in >> m_nNextBlockSize;
         }
 
-        if (tcpSocket->bytesAvailable() < m_nNextBlockSize) { break; }
+        if (serverSocket->bytesAvailable() < m_nNextBlockSize) { break; }
 
         QString str; in >> str;
 
@@ -77,25 +92,26 @@ void Client::readyRead()
 
 void Client::closeConnection()
 {
+    qDebug() << "closeConnection";
     timeoutTimer->stop();
 
-    //qDebug() << tcpSocket->state();
-    disconnect(tcpSocket, &QTcpSocket::connected, nullptr, nullptr);
-    disconnect(tcpSocket, &QTcpSocket::readyRead, nullptr, nullptr);
+    //qDebug() << serverSocket->state();
+    disconnect(serverSocket, &QSslSocket::connected, nullptr, nullptr);
+    disconnect(serverSocket, &QSslSocket::readyRead, nullptr, nullptr);
 
     bool shouldEmit = false;
-    switch (tcpSocket->state())
+    switch (serverSocket->state())
     {
         case 0:
-            tcpSocket->disconnectFromHost();
+            serverSocket->disconnectFromHost();
             shouldEmit = true;
             break;
         case 2:
-            tcpSocket->abort();
+            serverSocket->abort();
             shouldEmit = true;
             break;
         default:
-            tcpSocket->abort();
+            serverSocket->abort();
     }
 
     if (shouldEmit)

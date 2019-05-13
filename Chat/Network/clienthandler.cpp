@@ -14,7 +14,7 @@ ClientHandler::ClientHandler(Authenticator *authenticator, GroupsModel *groupsMo
 
     connect(client, &Client::hasReadSome, this, &ClientHandler::receivedSomething);
     connect(client, &Client::statusChanged, this, &ClientHandler::setStatus);
-    connect(client->tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+    connect(client->serverSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(gotError(QAbstractSocket::SocketError)));
 }
 
@@ -168,7 +168,7 @@ void ClientHandler::gotError(QAbstractSocket::SocketError err)
 
 void ClientHandler::connectToServer()
 {
-    client->connect2host();
+    client->connectToHost();
 }
 
 void ClientHandler::disconnectFromServer()
@@ -186,5 +186,5 @@ void ClientHandler::sendMessage(QString msg)
     out.device()->seek(0);
     out << quint16(arrBlock.size() - sizeof(quint16));
 
-    client->tcpSocket->write(arrBlock);
+    client->serverSocket->write(arrBlock);
 }

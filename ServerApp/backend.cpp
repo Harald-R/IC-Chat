@@ -30,7 +30,7 @@ QString Backend::stopClicked()
     {
         disconnect(server->tcpServer, &QTcpServer::newConnection, server, &Server::newConnection);
 
-        QList<QTcpSocket *> clients = server->getClients();
+        QList<QSslSocket *> clients = server->getClients();
         for(int i = 0; i < clients.count(); i++)
         {
             //server->sendToClient(clients.at(i), "Connection closed");
@@ -67,13 +67,13 @@ void Backend::clientConnectedToServer()
     emit clientConnected();
 }
 
-void Backend::clientDisconnectedFromServer(QTcpSocket *clientSocket)
+void Backend::clientDisconnectedFromServer(QSslSocket *clientSocket)
 {
     clientInfos_.remove(clientSocket);
     emit clientDisconnected();
 }
 
-void Backend::gotNewMesssage(QTcpSocket *clientSocket, QString msg)
+void Backend::gotNewMesssage(QSslSocket *clientSocket, QString msg)
 {
     if (checkForCommand(msg)) {
         if (processCommand(clientSocket, msg) < 0) {
@@ -104,7 +104,7 @@ int Backend::checkForCommand(QString msg)
     return v.validate(msg, pos) == QValidator::Acceptable;
 }
 
-int Backend::processCommand(QTcpSocket *clientSocket, QString command)
+int Backend::processCommand(QSslSocket *clientSocket, QString command)
 {
     QStringList stringList = command.split("|");
     QStringList::Iterator iter = stringList.begin();

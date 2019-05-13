@@ -21,16 +21,16 @@ public slots:
     QString startClicked();
     QString testClicked();
     void clientConnectedToServer();
-    void clientDisconnectedFromServer(QTcpSocket *clientSocket);
-    void gotNewMesssage(QTcpSocket *clientSocket, QString msg);
+    void clientDisconnectedFromServer(QSslSocket *clientSocket);
+    void gotNewMesssage(QSslSocket *clientSocket, QString msg);
 
 private:
     int checkForCommand(QString msg);
-    int processCommand(QTcpSocket *clientSocket, QString command);
+    int processCommand(QSslSocket *clientSocket, QString command);
     ClientInfo getClientInfo(unsigned int user_id);
 
     Server *server;
-    QMap<QTcpSocket*, ClientInfo> clientInfos_;
+    QMap<QSslSocket*, ClientInfo> clientInfos_;
 };
 
 #endif // BACKEND_H

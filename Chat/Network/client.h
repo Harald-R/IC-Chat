@@ -2,7 +2,7 @@
 #define CLIENT_H
 
 #include <QString>
-#include <QTcpSocket>
+#include <QSslSocket>
 #include <QDataStream>
 #include <QTimer>
 
@@ -13,12 +13,12 @@ class Client : public QObject
 public:
     Client(const QString host, int port);
 
-    QTcpSocket *tcpSocket;
+    QSslSocket *serverSocket;
     bool getStatus();
 
 public slots:
     void closeConnection();
-    void connect2host();
+    void connectToHost();
 
 signals:
     void statusChanged(bool);
@@ -28,6 +28,7 @@ private slots:
     void readyRead();
     void connected();
     void connectionTimeout();
+    void sslError(QList<QSslError> errors);
 
 private:
     QString host;

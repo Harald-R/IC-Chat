@@ -2,7 +2,7 @@
 #define SERVER_H
 
 #include <QTcpServer>
-#include <QTcpSocket>
+#include <QSslSocket>
 #include <QDataStream>
 #include <QList>
 
@@ -13,21 +13,23 @@ class Server : public QObject
 public:
     Server();
     QTcpServer *tcpServer;
-    QList<QTcpSocket *> getClients();
+    QList<QSslSocket *> getClients();
 
 public slots:
     virtual void newConnection();
     void readClient();
     void gotDisconnection();
-    qint64 sendToClient(QTcpSocket *socket, const QString &str);
+    void connectionEncrypted();
+    void sslError(QList<QSslError> errors);
+    qint64 sendToClient(QSslSocket *socket, const QString &str);
 
 signals:
-    void gotNewMesssage(QTcpSocket *clientSocket, QString msg);
-    void clientDisconnected(QTcpSocket *clientSocket);
+    void gotNewMesssage(QSslSocket *clientSocket, QString msg);
+    void clientDisconnected(QSslSocket *clientSocket);
 
 private:
     quint16 m_nNextBlockSize;
-    QList<QTcpSocket*> clients;
+    QList<QSslSocket *> clients;
 };
 
 #endif // SERVER_H
