@@ -10,6 +10,11 @@ ApplicationWindow {
     height: 600
     color: "#3d4766"
 
+    function getMainStackItem(){
+        console.log(mainLayout.currentItem());
+        return mainLayout.currentItem;
+    }
+
     title: qsTr("Chat")
     StackView{
         id: mainLayout

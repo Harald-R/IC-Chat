@@ -7,6 +7,22 @@ Page {
     id: loginCredentials
     visible: false
 
+    function getUsername(){
+        return usernameTextArea.text;
+    }
+
+    function getPassword(){
+        return passwordTextArea.text;
+    }
+
+    function clickRegisterButton(){
+        gotoRegisterPage.checked = true;
+    }
+
+    function getRegisterButtonState(){
+        return gotoRegisterPage.checked;
+    }
+
     Connections {
         target: authenticator
         onValidCredentials: mainLayout.push("qrc:/Resources/qml/MainApplicationWindow.qml")
