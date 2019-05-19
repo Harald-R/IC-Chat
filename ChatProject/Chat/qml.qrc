@@ -8,5 +8,6 @@
         <file>Resources/qml/RegisterPage.qml</file>
         <file>Resources/images/download.png</file>
         <file>Resources/images/search.svg</file>
+        <file>Resources/qml/ChatPage.qml</file>
     </qresource>
 </RCC>

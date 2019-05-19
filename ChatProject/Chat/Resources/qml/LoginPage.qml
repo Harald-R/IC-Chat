@@ -6,21 +6,17 @@ import QtGraphicalEffects 1.12
 Page {
     id: loginCredentials
     visible: false
-
-    function getUsername(){
-        return usernameTextArea.text;
-    }
-
-    function getPassword(){
-        return passwordTextArea.text;
-    }
+    property string password : passwordTextArea.text
+    property string username : usernameTextArea.text
+    property bool registerButtonState: gotoRegisterPage.checked
+    property bool credentialsButtonState: credentialsButton.checked
 
     function clickRegisterButton(){
         gotoRegisterPage.checked = true;
     }
 
-    function getRegisterButtonState(){
-        return gotoRegisterPage.checked;
+    function clickCredentialsButton(){
+        credentialsButton.checked = true;
     }
 
     Connections {

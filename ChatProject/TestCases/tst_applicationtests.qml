@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtTest 1.0
 import "../Chat/Resources/qml"
+import "../ServerApp/"
 
 TestCase {
     name: "ApplicationTests"
@@ -9,27 +10,34 @@ TestCase {
     LoginPage{
         id: loginPage
     }
+    ChatPage{
+        id: chatPage
+    }
 
 //    function initTestCase() {
-
 //    }
 
 //    function cleanupTestCase() {
 //    }
 
     function test_inputFields() {
-        var username = loginPage.getUsername();
+        var username = loginPage.username;
         compare(username, "user_1");
-
-        var password = loginPage.getPassword();
+        var password = loginPage.password;
         compare(password, "password");
     }
 
     function test_buttonFunc() {
-        var beforeState = loginPage.getRegisterButtonState();
+        var beforeRegisterState = loginPage.registerButtonState;
         loginPage.clickRegisterButton();
-        var afterState = loginPage.getRegisterButtonState();
+        var afterRegisterState = loginPage.registerButtonState;
+        compare(afterRegisterState, !beforeRegisterState);
 
-        compare(afterState, !beforeState);
+        var beforeCredentialsState = loginPage.credentialsButtonState;
+        loginPage.clickCredentialsButton();
+        var afterCredentialsState = loginPage.credentialsButtonState;
+        compare(afterCredentialsState, !beforeCredentialsState);
+
+        console.log(chatPage.currentWindow);
     }
 }
