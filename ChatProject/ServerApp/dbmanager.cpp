@@ -92,7 +92,7 @@ int DbManager::addUser(const QString &username, const QString &password, const Q
 bool DbManager::removeUser(const unsigned int user_id)
 {
     QSqlQuery query;
-    query.prepare("DELETE FROM users WHERE uid=:user_id");
+    query.prepare("DELETE FROM users WHERE user_id=:user_id");
     query.bindValue(":user_id", user_id);
 
     if (!query.exec()) {
@@ -106,7 +106,7 @@ bool DbManager::removeUser(const unsigned int user_id)
 bool DbManager::removeUser(const QString &username)
 {
     if (username.isEmpty()) {
-        qDebug() << "Failed adding user: empty parameter";
+        qDebug() << "Failed removing user: empty parameter";
         return false;
     }
 

@@ -7,3 +7,5 @@ DISTFILES += \
 
 SOURCES += \
     main.cpp
+
+HEADERS +=

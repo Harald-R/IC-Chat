@@ -5,6 +5,11 @@ import QtGraphicalEffects 1.12
 
 Page {
     id: registerCredentials
+    property bool registerButtonState : registerButton.checked
+
+    function clickRegisterButton(){
+        registerButton.checked = true;
+    }
 
     Rectangle{
         id: backgroundColor

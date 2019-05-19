@@ -194,6 +194,7 @@ Page {
         enabled: usernameTextArea.length && passwordTextArea.length
         onClicked: {
             clientHandler.sendMessage("SRV|login|" + usernameTextArea.text + "|" + passwordTextArea.text)
+            toBeSent = "SRV|login|" + usernameTextArea.text + "|" + passwordTextArea.text
         }
         background: Rectangle{
             id: credentialsButtonBackground

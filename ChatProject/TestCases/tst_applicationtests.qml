@@ -10,24 +10,18 @@ TestCase {
     LoginPage{
         id: loginPage
     }
-    ChatPage{
-        id: chatPage
+    RegisterPage{
+        id: registerPage
     }
 
-//    function initTestCase() {
-//    }
-
-//    function cleanupTestCase() {
-//    }
-
-    function test_inputFields() {
+    function test_loginInputFields() {
         var username = loginPage.username;
         compare(username, "user_1");
         var password = loginPage.password;
         compare(password, "password");
     }
 
-    function test_buttonFunc() {
+    function test_loginButtonsFunc() {
         var beforeRegisterState = loginPage.registerButtonState;
         loginPage.clickRegisterButton();
         var afterRegisterState = loginPage.registerButtonState;
@@ -37,7 +31,12 @@ TestCase {
         loginPage.clickCredentialsButton();
         var afterCredentialsState = loginPage.credentialsButtonState;
         compare(afterCredentialsState, !beforeCredentialsState);
+    }
 
-        console.log(chatPage.currentWindow);
+    function test_registerButtonFunc() {
+        var beforeRegisterState = registerPage.registerButtonState;
+        registerPage.clickRegisterButton();
+        var afterRegisterState = registerPage.registerButtonState;
+        compare(afterRegisterState, !beforeRegisterState);
     }
 }

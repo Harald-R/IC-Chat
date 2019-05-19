@@ -20,7 +20,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     dbmanager.cpp \
     server.cpp \
-    backend.cpp
+    backend.cpp \
+    testsuitedb.cpp
 
 RESOURCES += qml.qrc
 
@@ -39,4 +40,5 @@ HEADERS += \
     clientinfo.h \
     dbmanager.h \
     server.h \
-    backend.h
+    backend.h \
+    testsuitedb.h
